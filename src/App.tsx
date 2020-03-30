@@ -1,7 +1,12 @@
 import React from "react";
+import Layout from "./Layout/Layout";
 
 function App() {
-	return <div>Hi</div>;
+	return (
+		<Layout>
+			<div>sk8er</div>
+		</Layout>
+	);
 }
 
 export default App;

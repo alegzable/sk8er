@@ -1,0 +1,10 @@
+.Logo {
+	font-size: 16px;
+	color: #17ff74;
+	font-weight: bold;
+}
+
+.Logo > span {
+	font-size: 26px;
+	vertical-align: middle;
+}
