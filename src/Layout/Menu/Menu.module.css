@@ -1,20 +1,35 @@
-.HamburgerMenu {
-	position: relative;
-	padding-left: 1.25em;
+.Hamburger {
+	width: 3rem;
+	height: 1.7rem;
+	cursor: pointer;
+	user-select: none;
 }
-.HamburgerMenu:before {
+.Hamburger a {
+	position: relative;
+}
+.Hamburger a,
+.Hamburger a:before,
+.Hamburger a:after {
+	display: block;
+	width: 100%;
+	height: 0.3rem;
+	background: #fff;
+	border-radius: 0.2rem;
+}
+.Hamburger a:before,
+.Hamburger a:after {
 	content: "";
 	position: absolute;
-	left: 0;
-	top: 0.25em;
-	width: 1em;
-	height: 0.15em;
-	background: #fff;
-	box-shadow: 0 0.25em 0 0 #fff, 0 0.5em 0 0 #fff;
+}
+.Hamburger a:before {
+	bottom: -0.7rem;
+}
+.Hamburger a:after {
+	bottom: -1.4rem;
 }
 
-@media (min-width: 500px) {
-	.HamburgerMenu {
+@media (min-width: 60rem) {
+	.Hamburger {
 		display: none;
 	}
 }

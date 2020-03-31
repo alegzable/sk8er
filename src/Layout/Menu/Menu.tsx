@@ -7,8 +7,8 @@ type MenuProps = {
 
 const Menu: React.FC<MenuProps> = (props: MenuProps) => {
 	return (
-		<div className={classes.Menu}>
-			<a href="#" className={classes.HamburgerMenu} onClick={props.open}></a>
+		<div className={classes.Hamburger}>
+			<a href="#" onClick={props.open}></a>
 		</div>
 	);
 };

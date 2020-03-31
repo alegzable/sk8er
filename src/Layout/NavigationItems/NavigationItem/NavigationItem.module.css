@@ -3,7 +3,8 @@
 }
 
 .NavigationItem a {
-	padding: 12px;
+	padding: 1.2rem;
+	font-size: 1.6rem;
 	color: #5d1390fc;
 	box-sizing: border-box;
 	text-decoration: none;
@@ -16,13 +17,13 @@
 	background-color: #17ff74;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 60rem) {
 	.NavigationItem {
 		width: auto;
 	}
 
 	.NavigationItem a {
 		color: #fff;
-		padding: 12px 10px;
+		padding: 1.2rem 1rem;
 	}
 }
