@@ -1,0 +1,4 @@
+.Tricks {
+	display: flex;
+	flex-direction: column;
+}

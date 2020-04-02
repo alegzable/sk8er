@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "./Layout/Layout";
+import Tricks from "./Tricks/Tricks";
 
 function App() {
 	return (
 		<Layout>
-			<div>sk8er</div>
+			<Tricks />
 		</Layout>
 	);
 }
