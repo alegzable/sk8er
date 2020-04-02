@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./HamburgerMenu.module.css";
+import classes from "./HamburgerMenu.module.scss";
 
 type HamburgerMenuProps = {
 	open: () => void;

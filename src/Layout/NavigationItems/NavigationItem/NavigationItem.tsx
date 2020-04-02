@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import classes from "./NavigationItem.module.css";
+import classes from "./NavigationItem.module.scss";
 
 type NavigationItemProps = {
 	link: string;

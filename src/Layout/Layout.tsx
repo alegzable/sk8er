@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import classes from "./Layout.module.css";
+import classes from "./Layout.module.scss";
 import Toolbar from "./Toolbar/Toolbar";
 import SideDrawer from "./SideDrawer/SideDrawer";
 

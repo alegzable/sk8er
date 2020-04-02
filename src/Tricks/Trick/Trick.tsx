@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Trick.module.css";
+import classes from "./Trick.module.scss";
 
 type TrickProps = {
 	name: string;

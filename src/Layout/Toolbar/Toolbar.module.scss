@@ -1,10 +1,12 @@
+@import "../../variables.scss";
+
 .Toolbar {
 	height: 5.6rem;
 	width: 100%;
 	position: fixed;
 	top: 0;
 	left: 0;
-	background-color: #5d1390fc;
+	background-color: $menuColor;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

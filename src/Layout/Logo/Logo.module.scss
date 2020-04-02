@@ -1,0 +1,12 @@
+@import "../../variables.scss";
+
+.Logo {
+	font-size: 2rem;
+	color: $logoColor;
+	font-weight: bold;
+
+	span {
+		font-size: 3.2rem;
+		vertical-align: middle;
+	}
+}

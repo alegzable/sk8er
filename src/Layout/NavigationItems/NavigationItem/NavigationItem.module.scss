@@ -1,0 +1,31 @@
+@import "../../../variables.scss";
+
+.NavigationItem {
+	width: 100%;
+
+	a {
+		padding: 1.2rem;
+		font-size: 1.6rem;
+		color: $menuColor;
+		box-sizing: border-box;
+		text-decoration: none;
+		display: block;
+	}
+
+	a:hover,
+	a:active,
+	a.active {
+		background-color: $logoColor;
+	}
+}
+
+@media (min-width: 60rem) {
+	.NavigationItem {
+		width: auto;
+
+		a {
+			color: #fff;
+			padding: 1.2rem 1rem;
+		}
+	}
+}

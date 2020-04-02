@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import classes from "./Tricks.module.css";
+import classes from "./Tricks.module.scss";
 import Trick from "./Trick/Trick";
 
 type TricksProps = {};
