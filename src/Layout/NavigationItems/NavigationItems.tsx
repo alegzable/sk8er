@@ -5,10 +5,10 @@ import NavigationItem from "./NavigationItem/NavigationItem";
 const NavigationItems: React.FC = () => {
 	return (
 		<ul className={classes.NavigationItems}>
-			<NavigationItem link="/" active>
+			<NavigationItem link="/" exact>
 				Tricks
 			</NavigationItem>
-			<NavigationItem link="/">My Tricks</NavigationItem>
+			<NavigationItem link="/my-tricks">My Tricks</NavigationItem>
 		</ul>
 	);
 };

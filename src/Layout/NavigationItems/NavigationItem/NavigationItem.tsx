@@ -1,17 +1,18 @@
 import React, { PropsWithChildren } from "react";
 import classes from "./NavigationItem.module.scss";
+import { NavLink } from "react-router-dom";
 
 type NavigationItemProps = {
 	link: string;
-	active?: boolean;
+	exact?: boolean;
 };
 
 const NavigationItem: React.FC<NavigationItemProps> = (props: PropsWithChildren<NavigationItemProps>) => {
 	return (
 		<li className={classes.NavigationItem}>
-			<a href={props.link} className={props.active ? classes.active : ""}>
+			<NavLink to={props.link} exact={props.exact} activeClassName={classes.active}>
 				{props.children}
-			</a>
+			</NavLink>
 		</li>
 	);
 };
