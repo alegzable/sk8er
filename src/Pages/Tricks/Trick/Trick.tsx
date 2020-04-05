@@ -11,7 +11,7 @@ const Trick: React.FC<TrickProps> = (props: TrickProps) => {
 	return (
 		<div className={classes.Trick}>
 			<h2>{props.name}</h2>
-			<Video url={props.videoUrl} />
+			<Video url={props.videoUrl} title={props.name} />
 		</div>
 	);
 };

@@ -3,6 +3,7 @@ import classes from "./Video.module.scss";
 
 type VideoProps = {
 	url: string;
+	title: string;
 };
 
 const Video: React.FC<VideoProps> = (props: VideoProps) => {
@@ -14,6 +15,7 @@ const Video: React.FC<VideoProps> = (props: VideoProps) => {
 				allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 				allowFullScreen
 				className={classes.IFrame}
+				title={props.title}
 			></iframe>
 		</div>
 	);
