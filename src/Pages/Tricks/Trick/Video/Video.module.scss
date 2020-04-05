@@ -1,0 +1,14 @@
+.Video {
+	overflow: hidden;
+	padding-top: 56.25%;
+	position: relative;
+
+	.IFrame {
+		border: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+	}
+}
