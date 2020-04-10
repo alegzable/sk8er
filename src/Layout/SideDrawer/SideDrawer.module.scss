@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 .SideDrawer {
 	position: fixed;
 	width: 28rem;
@@ -6,7 +8,7 @@
 	left: 0;
 	top: 0;
 	z-index: 200;
-	background-color: #fff;
+	background-color: $backgroundBrightColor;
 	padding: 1.6rem 0;
 	box-sizing: border-box;
 	transition: transform 0.3s ease-out;
