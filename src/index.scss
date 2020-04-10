@@ -17,8 +17,20 @@
 
 * {
 	font-family: "JetBrains Mono", "Courier New", Courier, monospace;
+	box-sizing: border-box;
+	text-decoration: none;
 }
 
 html {
 	font-size: 62.5%;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+button {
+	cursor: pointer;
 }
