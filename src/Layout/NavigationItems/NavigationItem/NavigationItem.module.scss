@@ -10,7 +10,10 @@
 		display: block;
 	}
 
-	a:hover,
+	a:hover {
+		background-color: $menuColorDark;
+	}
+
 	a:active,
 	a.active {
 		background-color: $logoColor;
@@ -20,9 +23,10 @@
 @media (min-width: 60rem) {
 	.NavigationItem {
 		width: auto;
+		margin: 0 0.4rem;
 
 		a {
-			color: $backgroundBrightColor;
+			color: $backgroundColorBright;
 			padding: 1.2rem 1rem;
 		}
 	}
