@@ -11,7 +11,6 @@ const icons: [ActionTypes, IconDefinition][] = [
 type AddRemoveButtonProps = {
 	actionType: ActionTypes;
 	handleOnClick: () => void;
-	dupa?: boolean;
 };
 
 const AddRemoveButton: React.FC<AddRemoveButtonProps> = (props: AddRemoveButtonProps) => {
@@ -19,7 +18,7 @@ const AddRemoveButton: React.FC<AddRemoveButtonProps> = (props: AddRemoveButtonP
 		ActionTypes,
 		IconDefinition
 	])[1];
-	console.log(props.dupa);
+
 	return (
 		<button className={classes.AddRemoveButton} onClick={props.handleOnClick}>
 			<FontAwesomeIcon icon={icon} />

@@ -7,19 +7,20 @@ type TrickProps = {
 	id: number;
 	name: string;
 	videoUrl: string;
-	checkIfAdded: (id: number) => boolean;
-	setAdded: (id: number, added: boolean) => void;
+	added: boolean;
+	addToMyTricks: (id: number) => void;
+	removeFromMyTricks: (id: number) => void;
 };
 
 const Trick: React.FC<TrickProps> = (props: TrickProps) => {
-	const added = props.checkIfAdded(props.id);
-	const actionType = added ? "remove" : "add";
+	const actionType = props.added ? "remove" : "add";
+	const clickHandler = props.added ? props.removeFromMyTricks : props.addToMyTricks;
 
 	return (
 		<div className={classes.Trick}>
 			<div className={classes.Header}>
 				<h2>{props.name}</h2>
-				<AddRemoveButton actionType={actionType} handleOnClick={() => props.setAdded(props.id, !added)} />
+				<AddRemoveButton actionType={actionType} handleOnClick={() => clickHandler(props.id)} />
 			</div>
 			<Video url={props.videoUrl} title={props.name} />
 		</div>

@@ -1,46 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classes from "./Tricks.module.scss";
 import Trick from "./Trick/Trick";
+import localStorageDataService from "../../Services/LocalStorageDataService";
+import { UserLibraryTrick } from "./Trick/TrickTypes";
 
-type TricksProps = {};
+const Tricks: React.FC = () => {
+	const [tricks, setTricks] = useState<UserLibraryTrick[]>([]);
 
-const Tricks: React.FC<TricksProps> = (props: TricksProps) => {
-	const [tricks, setTricks] = useState([
-		{ id: 1, name: "Shove It", videoUrl: "https://www.youtube.com/embed/2O2_UZfH5SU", added: false },
-		{ id: 2, name: "Ollie", videoUrl: "https://www.youtube.com/embed/VasSLuFO4wY", added: false },
-		{ id: 3, name: "Heel Flip", videoUrl: "https://www.youtube.com/embed/phsJk5_jHkU", added: false },
-		{ id: 3, name: "Kick Flip", videoUrl: "https://www.youtube.com/embed/YOf0XeI7KzU", added: false },
-	]);
+	useEffect(() => {
+		setTricks(localStorageDataService.getUserLibraryTricks());
+	}, []);
 
-	const getTrick = (tricks: any[], id: number) => {
-		const trick = tricks.find((x) => x.id === id);
+	const addToMyTricks = (id: number) => {
+		localStorageDataService.addToMyTricks(id);
 
-		if (trick === undefined) {
-			throw new Error(`Trick with id ${id} does not exist`);
-		}
-
-		return trick;
+		setTricks(localStorageDataService.getUserLibraryTricks());
 	};
-	const checkIfAdded = (id: number) => {
-		const trick = getTrick(tricks, id);
 
-		return trick.added;
-	};
-	const setAdded = (id: number, added: boolean) => {
-		const tricksCopy = [...tricks];
-		const trick = getTrick(tricksCopy, id);
+	const removeFromMyTricks = (id: number) => {
+		localStorageDataService.removeFromMyTricks(id);
 
-		trick.added = added;
-		setTricks(tricksCopy);
+		setTricks(localStorageDataService.getUserLibraryTricks());
 	};
+
 	const trickList = tricks.map((trick) => (
 		<Trick
 			key={trick.id}
 			id={trick.id}
 			name={trick.name}
 			videoUrl={trick.videoUrl}
-			checkIfAdded={checkIfAdded}
-			setAdded={setAdded}
+			added={trick.addedToMyTricks}
+			addToMyTricks={addToMyTricks}
+			removeFromMyTricks={removeFromMyTricks}
 		/>
 	));
 	return <div className={classes.Tricks}>{trickList}</div>;
