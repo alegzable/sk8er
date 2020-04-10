@@ -2,3 +2,11 @@
 	display: flex;
 	flex-direction: column;
 }
+
+@media (min-width: 60rem) {
+	.Tricks {
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+}

@@ -1,5 +1,42 @@
+@keyframes rotation {
+	33% {
+		transform: rotate(2deg);
+	}
+	66% {
+		transform: rotate(-1deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
+}
+
 .Trick {
-	h2 {
-		text-transform: uppercase;
+	width: 100%;
+	height: fit-content;
+	padding: 1.2rem;
+	margin: 1.2rem 0.6rem;
+	border-radius: 0.4rem;
+	box-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+
+	&:hover {
+		box-shadow: 0.1rem 0.2rem 0.6rem rgba(0, 0, 0, 0.5);
+		animation: rotation 0.5s;
+	}
+
+	.Header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.2rem;
+
+		h2 {
+			text-transform: uppercase;
+		}
+	}
+}
+
+@media (min-width: 60rem) {
+	.Trick {
+		width: 32%;
 	}
 }

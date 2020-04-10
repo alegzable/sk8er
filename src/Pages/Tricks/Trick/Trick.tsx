@@ -10,7 +10,9 @@ type TrickProps = {
 const Trick: React.FC<TrickProps> = (props: TrickProps) => {
 	return (
 		<div className={classes.Trick}>
+			<div className={classes.Header}>
 			<h2>{props.name}</h2>
+			</div>
 			<Video url={props.videoUrl} title={props.name} />
 		</div>
 	);
