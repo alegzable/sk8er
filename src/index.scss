@@ -21,6 +21,10 @@
 	text-decoration: none;
 }
 
+[data-whatintent="mouse"] *:focus {
+	outline: none;
+}
+
 html {
 	font-size: 62.5%;
 }
