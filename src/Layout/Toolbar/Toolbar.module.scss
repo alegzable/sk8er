@@ -1,7 +1,7 @@
 @import "../../variables.scss";
 
 .Toolbar {
-	height: 5.6rem;
+	height: $headerHeight;
 	width: 100%;
 	position: fixed;
 	top: 0;
@@ -12,7 +12,6 @@
 	align-items: center;
 	z-index: 90;
 	padding: 0 2rem;
-	box-sizing: border-box;
 }
 
 @media (max-width: 59.99rem) {

@@ -6,6 +6,10 @@ export const localStorageKeys = {
 } as const;
 
 export class LocalStorageDataService {
+	public getMyTricks = (): MyTrick[] => {
+		return this.getFromStorage<MyTrick[]>(localStorageKeys.myTricks) || [];
+	};
+
 	public getUserLibraryTricks = (): UserLibraryTrick[] => {
 		const libraryTricks = this.getFromStorage<LibraryTrick[]>(localStorageKeys.tricks);
 		const myTricks = this.getFromStorage<MyTrick[]>(localStorageKeys.myTricks);

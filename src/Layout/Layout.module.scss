@@ -1,3 +1,6 @@
+@import "../variables.scss";
+
 .Content {
-	margin-top: 7.2rem;
+	margin-top: $headerHeight;
+	height: 100%;
 }
