@@ -10,11 +10,12 @@ const MyTricks: React.FC = () => {
 	const [selectedTrick, setSelectedTrick] = useState<MyTrick>();
 
 	useEffect(() => {
-		const myTricks = localStorageDataService.getMyTricks();
-
-		setMyTricks(myTricks);
-		setSelectedTrick(myTricks[0]);
+		setMyTricks(localStorageDataService.getMyTricks());
 	}, []);
+
+	useEffect(() => {
+		setSelectedTrick(myTricks[0]);
+	}, [myTricks]);
 
 	const selectedTrickChanged = (id: number) => {
 		const trick = myTricks.find((x) => x.id === id);
