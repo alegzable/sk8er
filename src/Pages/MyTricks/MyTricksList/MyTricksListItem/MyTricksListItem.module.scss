@@ -1,14 +1,5 @@
 @import "../../../../variables.scss";
 
-@keyframes rotation {
-	50% {
-		transform: rotate(180deg);
-	}
-	100% {
-		transform: rotate(-180deg);
-	}
-}
-
 .MyTricksListItem {
 	padding: 1.2rem;
 	margin: 0 1.2rem;
@@ -24,7 +15,6 @@
 		box-shadow: 0.1rem 0.2rem 0.6rem rgba(0, 0, 0, 0.5);
 		transition-property: background-color;
 		transition-duration: 0.3s;
-		animation: rotation 0.5s;
 	}
 
 	.Header {
