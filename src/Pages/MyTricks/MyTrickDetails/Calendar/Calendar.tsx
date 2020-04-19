@@ -60,6 +60,16 @@ const Calendar: React.FC<CalendarProps> = ({ markedDates, onCellClick }) => {
 		setColumnsWithDates(columns);
 	}, [numberOfColumns, markedDates]);
 
+	useEffect(() => {
+		function updateNumberOfColumns() {
+			setNumberOfColumns(getNumberOfColumns(calendarRef, CELL_SIZE_REMS));
+		}
+
+		window.addEventListener("resize", updateNumberOfColumns);
+
+		return () => window.removeEventListener("resize", updateNumberOfColumns);
+	});
+
 	const getNumberOfColumns = (ref: any, cellSize: number) => {
 		const sliderButtonColumns = 2;
 		const weekDaysColumns = 1;
