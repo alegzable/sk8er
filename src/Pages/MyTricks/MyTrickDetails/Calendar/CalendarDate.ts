@@ -1,5 +1,5 @@
 import { addDays } from "../../../../Utils/dateUtils";
-
+type CompareResult = 1 | 0 | -1;
 export default class CalendarDate {
 	constructor(public year: number, public month: number, public day: number) {}
 
@@ -21,6 +21,21 @@ export default class CalendarDate {
 
 	public getTimeSinceUnixEpoch = (): number => {
 		return this._getDate().getTime();
+	};
+
+	public compare = (other: CalendarDate): CompareResult => {
+		const thisDate = this._getDate();
+		const otherDate = other._getDate();
+
+		if (thisDate > otherDate) {
+			return 1;
+		}
+
+		if (thisDate < otherDate) {
+			return -1;
+		}
+
+		return 0;
 	};
 
 	public static today(): CalendarDate {

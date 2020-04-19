@@ -1,0 +1,18 @@
+@import "../../../../../variables.scss";
+
+.SliderButton {
+	border: none;
+	background: $whiteColor;
+
+	&:hover {
+		color: $purpleColor;
+	}
+
+	&:active {
+		color: $purpleColorDark;
+	}
+
+	&:disabled {
+		color: $greyColor;
+	}
+}

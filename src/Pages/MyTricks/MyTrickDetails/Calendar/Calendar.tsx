@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useRef, MutableRefObject } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import classes from "./Calendar.module.scss";
 import CalendarColumn from "./CalendarColumn/CalendarColumn";
 import { CalendarCellModel } from "./CalendarCell/CalendarCellModel";
 import { weekDaysAbbr } from "../../../../Utils/dateUtils";
 import CalendarDate from "./CalendarDate";
 import { getRemString } from "../../../../Utils/htmlUtils";
+import SliderButton from "./SliderButton/SliderButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 type CalendarProps = {
 	markedDates: CalendarDate[];
 	onCellClick: (date: CalendarDate, marked: boolean) => void;
 };
 
-const getNumberOfColumns = (ref: any, cellSize: number) => {
-	return Math.floor(ref.current.clientWidth / (cellSize * 10)) - 1;
-};
+const CELL_SIZE_REMS = 4;
 
 const getColumnsWithDates = (
 	numberOfColumns: number,
@@ -44,56 +45,97 @@ const getColumnsWithDates = (
 	return columns;
 };
 
-const getWeekDays = (cellSize: number) => {
-	const weekDays = weekDaysAbbr.map((x, i) => (
-		<div
-			key={i}
-			style={{
-				height: getRemString(cellSize),
-				width: getRemString(cellSize),
-				lineHeight: getRemString(cellSize),
-			}}
-		>
-			{x}
-		</div>
-	));
-	return (
-		<div
-			className={classes.WeekDays}
-			style={{ marginTop: getRemString(cellSize), fontSize: getRemString(cellSize * 0.25) }}
-		>
-			{weekDays}
-		</div>
-	);
-};
-
 const Calendar: React.FC<CalendarProps> = ({ markedDates, onCellClick }) => {
 	const calendarRef = useRef(null);
-	const [cellSize, setCellSize] = useState(4);
+	const [pageNumber, setPageNumber] = useState(1);
 	const [numberOfColumns, setNumberOfColumns] = useState(0);
 	const [columnsWithDates, setColumnsWithDates] = useState<CalendarCellModel[][]>([]);
+	const [transformOffset, setTransformOffset] = useState(0);
+	useEffect(() => {
+		setNumberOfColumns(getNumberOfColumns(calendarRef, CELL_SIZE_REMS));
+	}, []);
 
 	useEffect(() => {
-		setNumberOfColumns(getNumberOfColumns(calendarRef, cellSize));
-	}, [cellSize]);
-
-	useEffect(() => {
-		const columns = getColumnsWithDates(numberOfColumns, CalendarDate.today(), markedDates);
+		const columns = getColumnsWithDates(numberOfColumns * pageNumber, CalendarDate.today(), markedDates);
 		setColumnsWithDates(columns);
 	}, [numberOfColumns, markedDates]);
 
+	const getNumberOfColumns = (ref: any, cellSize: number) => {
+		const sliderButtonColumns = 2;
+		const weekDaysColumns = 1;
+		const transformOffset = ref.current.clientWidth % (cellSize * 10);
+
+		setTransformOffset(transformOffset);
+
+		return Math.floor(ref.current.clientWidth / (cellSize * 10)) - sliderButtonColumns - weekDaysColumns;
+	};
+
+	const loadPreviousPage = () => {
+		if (columnsWithDates.length / numberOfColumns === pageNumber) {
+			const currentLastDate = columnsWithDates[0][0].date;
+			const newLastDate = currentLastDate.addDays(-1);
+			const columns = getColumnsWithDates(numberOfColumns, newLastDate, markedDates);
+
+			setColumnsWithDates([...columns, ...columnsWithDates]);
+		}
+
+		setPageNumber(pageNumber + 1);
+	};
+
 	const columns = columnsWithDates.map((column, index) => {
 		return (
-			<CalendarColumn dates={column} cellSize={cellSize} onCellClick={onCellClick} index={index} key={index} />
+			<CalendarColumn
+				dates={column}
+				cellSize={CELL_SIZE_REMS}
+				onCellClick={onCellClick}
+				index={index % numberOfColumns}
+				key={index}
+			/>
 		);
 	});
 
-	const weekDays = getWeekDays(cellSize);
+	const weekDays = weekDaysAbbr.map((weekDay, index) => (
+		<div
+			className={classes.WeekDay}
+			key={index}
+			style={{
+				height: getRemString(CELL_SIZE_REMS),
+				width: getRemString(CELL_SIZE_REMS),
+				lineHeight: getRemString(CELL_SIZE_REMS),
+			}}
+		>
+			{weekDay}
+		</div>
+	));
+
+	const columnsStyle =
+		pageNumber > 1
+			? { transform: `translateX(calc(${(pageNumber - 1) * 100}% - ${(pageNumber - 1) * transformOffset}px))` }
+			: undefined;
 
 	return (
-		<div ref={calendarRef} className={classes.Calendar} style={{ fontSize: getRemString(cellSize * 0.3) }}>
-			{columns}
-			{weekDays}
+		<div className={classes.Calendar} ref={calendarRef} style={{ fontSize: getRemString(CELL_SIZE_REMS * 0.3) }}>
+			<SliderButton onClick={loadPreviousPage} cellSize={CELL_SIZE_REMS}>
+				<FontAwesomeIcon icon={faChevronLeft} />
+			</SliderButton>
+			<div className={classes.ColumnsWrapper}>
+				<div className={classes.Columns} style={columnsStyle}>
+					{columns}
+				</div>
+			</div>
+			<div
+				className={classes.WeekDays}
+				style={{ marginTop: getRemString(CELL_SIZE_REMS), fontSize: getRemString(CELL_SIZE_REMS * 0.25) }}
+			>
+				{weekDays}
+			</div>
+			<SliderButton
+				disabled={pageNumber === 1}
+				onClick={() => setPageNumber(pageNumber - 1)}
+				cellSize={CELL_SIZE_REMS}
+			>
+				<FontAwesomeIcon icon={faChevronRight} />
+			</SliderButton>
 		</div>
 	);
 };

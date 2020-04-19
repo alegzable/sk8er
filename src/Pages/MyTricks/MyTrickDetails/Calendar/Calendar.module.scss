@@ -3,13 +3,25 @@
 .Calendar {
 	display: flex;
 
+	.ColumnsWrapper {
+		display: flex;
+		overflow: hidden;
+
+		.Columns {
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			transition: transform 0.4s ease-in-out;
+		}
+	}
+
 	.WeekDays {
 		display: flex;
 		flex-direction: column;
 		text-align: center;
 		font-weight: bold;
 
-		div {
+		.WeekDay {
 			border: 0.2rem solid $whiteColor;
 		}
 	}

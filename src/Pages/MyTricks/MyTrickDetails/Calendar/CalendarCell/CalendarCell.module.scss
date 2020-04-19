@@ -3,8 +3,14 @@
 .CalendarCell {
 	text-align: center;
 	cursor: pointer;
-	background-color: $veryLightGreyColor;
+	background-color: $greyColorVeryLight;
 	border: 0.2rem solid $whiteColor;
+
+	&:hover {
+		background-color: $toxicGreenColor;
+		transition-property: background-color;
+		transition-duration: 0.3s;
+	}
 }
 
 .Marked {
@@ -16,5 +22,5 @@
 }
 
 .Weekend:not(.Marked) {
-	background-color: darken($veryLightGreyColor, 3%);
+	background-color: $greyColorLight;
 }

@@ -1,7 +1,12 @@
 $toxicGreenColor: rgb(23, 255, 116);
+
 $purpleColor: rgb(93, 19, 144);
 $purpleColorDark: darken($purpleColor, 10%);
+
+$greyColor: rgb(215, 215, 215);
+$greyColorLight: lighten($greyColor, 10%);
+$greyColorVeryLight: lighten($greyColorLight, 3%);
+
 $whiteColor: rgb(255, 255, 255);
-$veryLightGreyColor: rgb(248, 248, 248);
 
 $headerHeight: 5.6rem;
