@@ -47,6 +47,7 @@ const CalendarColumn: React.FC<CalendarColumnProps> = ({ dates, cellSize, index,
 			width: getRemString(cellSize),
 			height: getRemString(cellSize),
 			lineHeight: getRemString(cellSize),
+			fontSize: getRemString(cellSize * 0.25),
 		};
 
 		return (
