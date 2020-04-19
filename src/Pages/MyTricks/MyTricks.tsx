@@ -32,7 +32,7 @@ const MyTricks: React.FC = () => {
 				/>
 			</div>
 			<div className={classes.Details}>
-				<MyTrickDetails trick={selectedTrick} />
+				<MyTrickDetails id={selectedTrick?.id} />
 			</div>
 		</div>
 	);

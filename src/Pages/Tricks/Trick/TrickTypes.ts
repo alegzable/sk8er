@@ -1,3 +1,5 @@
+import CalendarDate from "../../MyTricks/MyTrickDetails/Calendar/CalendarDate";
+
 export type LibraryTrick = {
 	id: number;
 	name: string;
@@ -5,4 +7,5 @@ export type LibraryTrick = {
 };
 
 export type UserLibraryTrick = LibraryTrick & { addedToMyTricks: boolean };
-export type MyTrick = LibraryTrick;
+export type MyTrickJSON = LibraryTrick & { practiceDates: { year: number; month: number; day: number }[] };
+export type MyTrick = LibraryTrick & { practiceDates: CalendarDate[] };

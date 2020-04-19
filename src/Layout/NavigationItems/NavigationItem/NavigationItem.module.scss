@@ -6,17 +6,17 @@
 	a {
 		padding: 1.2rem;
 		font-size: 1.6rem;
-		color: $menuColor;
+		color: $purpleColor;
 		display: block;
 	}
 
 	a:hover {
-		background-color: $menuColorDark;
+		background-color: $purpleColorDark;
 	}
 
 	a:active,
 	a.active {
-		background-color: $logoColor;
+		background-color: $toxicGreenColor;
 	}
 }
 
@@ -26,7 +26,7 @@
 		margin: 0 0.4rem;
 
 		a {
-			color: $backgroundColorBright;
+			color: $whiteColor;
 			padding: 1.2rem 1rem;
 		}
 	}

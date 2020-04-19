@@ -1,0 +1,12 @@
+.CalendarColumn {
+	display: flex;
+	flex-direction: column;
+
+	.ColumnHeader {
+		text-align: left;
+		line-height: 4rem;
+		height: 4rem;
+		padding-left: 0.4rem;
+		font-weight: bold;
+	}
+}

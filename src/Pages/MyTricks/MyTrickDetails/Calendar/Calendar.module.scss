@@ -1,0 +1,16 @@
+@import "../../../../variables.scss";
+
+.Calendar {
+	display: flex;
+
+	.WeekDays {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+		font-weight: bold;
+
+		div {
+			border: 0.2rem solid $whiteColor;
+		}
+	}
+}

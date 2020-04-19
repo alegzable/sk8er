@@ -1,4 +1,5 @@
-import { UserLibraryTrick, LibraryTrick, MyTrick } from "../Pages/Tricks/Trick/TrickTypes";
+import { UserLibraryTrick, LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/Tricks/Trick/TrickTypes";
+import CalendarDate from "../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
 
 export const localStorageKeys = {
 	tricks: "TRICKS",
@@ -7,12 +8,70 @@ export const localStorageKeys = {
 
 export class LocalStorageDataService {
 	public getMyTricks = (): MyTrick[] => {
-		return this.getFromStorage<MyTrick[]>(localStorageKeys.myTricks) || [];
+		const myTricksJSON = this._getFromStorage<MyTrickJSON[]>(localStorageKeys.myTricks) || [];
+
+		return myTricksJSON.map((x) => {
+			return {
+				id: x.id,
+				name: x.name,
+				videoUrl: x.videoUrl,
+				practiceDates: x.practiceDates.map(
+					(practiceDay) => new CalendarDate(practiceDay.year, practiceDay.month, practiceDay.day)
+				),
+			};
+		});
+	};
+
+	public getMyTrick = (id?: number): MyTrick | undefined => {
+		if (!id) {
+			return undefined;
+		}
+
+		const myTricks = this.getMyTricks();
+		return myTricks.find((x) => x.id === id);
+	};
+
+	public addPracticeDay = (id: number, date: CalendarDate) => {
+		const myTricks = this.getMyTricks();
+		const trick = myTricks.find((x) => x.id === id);
+
+		if (!trick) {
+			return;
+		}
+
+		const alreadyAdded = trick.practiceDates.findIndex((x) => x.equals(date)) !== -1;
+
+		if (alreadyAdded) {
+			return;
+		}
+
+		trick.practiceDates.push(date);
+
+		this._addToStorage(localStorageKeys.myTricks, myTricks);
+	};
+
+	public removePracticeDay = (id: number, date: CalendarDate) => {
+		const myTricks = this.getMyTricks();
+		const trick = myTricks.find((x) => x.id === id);
+
+		if (!trick) {
+			return;
+		}
+
+		const dayToRemoveIndex = trick.practiceDates.findIndex((x) => x.equals(date));
+
+		if (dayToRemoveIndex === -1) {
+			return;
+		}
+
+		trick.practiceDates.splice(dayToRemoveIndex, 1);
+
+		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
 	public getUserLibraryTricks = (): UserLibraryTrick[] => {
-		const libraryTricks = this.getFromStorage<LibraryTrick[]>(localStorageKeys.tricks);
-		const myTricks = this.getFromStorage<MyTrick[]>(localStorageKeys.myTricks);
+		const libraryTricks = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks);
+		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks);
 
 		if (libraryTricks === null) {
 			return [];
@@ -33,26 +92,28 @@ export class LocalStorageDataService {
 	};
 
 	public addToMyTricks = (id: number) => {
-		const myTricks = this.getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
+		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
 		const alreadyAdded = myTricks.findIndex((x) => x.id === id) !== -1;
 
 		if (alreadyAdded) {
 			return;
 		}
 
-		const trickToAdd = this.getFromStorage<LibraryTrick[]>(localStorageKeys.tricks)?.find((x) => x.id === id);
+		const trickToAdd = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks)?.find((x) => x.id === id);
 
 		if (trickToAdd === undefined) {
 			throw new Error("Trick does not exist");
 		}
 
-		myTricks.push(trickToAdd);
+		(trickToAdd as MyTrick).practiceDates = [];
 
-		this.addToStorage(localStorageKeys.myTricks, myTricks);
+		myTricks.push(trickToAdd as MyTrick);
+
+		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
 	public removeFromMyTricks = (id: number) => {
-		const myTricks = this.getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
+		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
 		const trickToRemoveIndex = myTricks.findIndex((x) => x.id === id);
 
 		if (trickToRemoveIndex === -1) {
@@ -60,18 +121,18 @@ export class LocalStorageDataService {
 		}
 
 		myTricks.splice(trickToRemoveIndex, 1);
-		this.addToStorage(localStorageKeys.myTricks, myTricks);
+		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
 	public initiateTricksLibrary = (tricks: LibraryTrick[]) => {
-		const shouldInitiate = this.getFromStorage<LibraryTrick[]>(localStorageKeys.tricks) === null;
+		const shouldInitiate = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks) === null;
 
 		if (shouldInitiate) {
-			this.addToStorage(localStorageKeys.tricks, tricks);
+			this._addToStorage(localStorageKeys.tricks, tricks);
 		}
 	};
 
-	private getFromStorage<T>(key: string): T | null {
+	private _getFromStorage<T>(key: string): T | null {
 		const json = localStorage.getItem(key);
 
 		if (json === null) {
@@ -81,7 +142,7 @@ export class LocalStorageDataService {
 		return JSON.parse(json);
 	}
 
-	private addToStorage(key: string, value: any) {
+	private _addToStorage(key: string, value: any) {
 		localStorage.setItem(key, JSON.stringify(value));
 	}
 }
