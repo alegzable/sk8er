@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, MutableRefObject } from "react";
 import classes from "./Calendar.module.scss";
 import CalendarColumn from "./CalendarColumn/CalendarColumn";
 import { CalendarCellModel } from "./CalendarCell/CalendarCellModel";
@@ -11,15 +11,8 @@ type CalendarProps = {
 	onCellClick: (date: CalendarDate, marked: boolean) => void;
 };
 
-const getNumberOfColumns = () => {
-	const windowWidth = window.innerWidth;
-	if (windowWidth < 600) {
-		return 6;
-	} else if (windowWidth >= 600 && windowWidth < 800) {
-		return 12;
-	}
-
-	return 20;
+const getNumberOfColumns = (ref: any, cellSize: number) => {
+	return Math.floor(ref.current.clientWidth / (cellSize * 10)) - 1;
 };
 
 const getColumnsWithDates = (
@@ -65,16 +58,24 @@ const getWeekDays = (cellSize: number) => {
 		</div>
 	));
 	return (
-		<div className={classes.WeekDays} style={{ marginTop: getRemString(cellSize) }}>
+		<div
+			className={classes.WeekDays}
+			style={{ marginTop: getRemString(cellSize), fontSize: getRemString(cellSize * 0.25) }}
+		>
 			{weekDays}
 		</div>
 	);
 };
 
 const Calendar: React.FC<CalendarProps> = ({ markedDates, onCellClick }) => {
-	const [numberOfColumns, setNumberOfColumns] = useState(getNumberOfColumns());
-	const [columnsWithDates, setColumnsWithDates] = useState<CalendarCellModel[][]>([]);
+	const calendarRef = useRef(null);
 	const [cellSize, setCellSize] = useState(4);
+	const [numberOfColumns, setNumberOfColumns] = useState(0);
+	const [columnsWithDates, setColumnsWithDates] = useState<CalendarCellModel[][]>([]);
+
+	useEffect(() => {
+		setNumberOfColumns(getNumberOfColumns(calendarRef, cellSize));
+	}, [cellSize]);
 
 	useEffect(() => {
 		const columns = getColumnsWithDates(numberOfColumns, CalendarDate.today(), markedDates);
@@ -90,7 +91,7 @@ const Calendar: React.FC<CalendarProps> = ({ markedDates, onCellClick }) => {
 	const weekDays = getWeekDays(cellSize);
 
 	return (
-		<div className={classes.Calendar} style={{ fontSize: getRemString(cellSize * 0.3) }}>
+		<div ref={calendarRef} className={classes.Calendar} style={{ fontSize: getRemString(cellSize * 0.3) }}>
 			{columns}
 			{weekDays}
 		</div>
