@@ -2,16 +2,21 @@
 
 .Calendar {
 	display: flex;
+	flex-direction: column;
 
-	.ColumnsWrapper {
+	.CalendarWithSlider {
 		display: flex;
-		overflow: hidden;
 
-		.Columns {
-			width: 100%;
+		.ColumnsWrapper {
 			display: flex;
-			justify-content: flex-end;
-			transition: transform 0.4s ease-in-out;
+			overflow: hidden;
+
+			.Columns {
+				width: 100%;
+				display: flex;
+				justify-content: flex-end;
+				transition: transform 0.4s ease-in-out;
+			}
 		}
 	}
 

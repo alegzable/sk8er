@@ -34,7 +34,11 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ id }) => {
 				<Video url={trick.videoUrl} title={trick.name} />
 			</div>
 			<div className={classes.Calendar}>
-				<Calendar markedDates={trick.practiceDates} onCellClick={onCellClick} />
+				<Calendar
+					markedDates={trick.practiceDates}
+					onCellClick={onCellClick}
+					title={"Have you practiced today?"}
+				/>
 			</div>
 		</>
 	) : null;
