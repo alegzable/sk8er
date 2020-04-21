@@ -4,6 +4,7 @@ import { MyTrick } from "../Tricks/Trick/TrickTypes";
 import localStorageDataService from "../../Services/LocalStorageDataService";
 import MyTricksList from "./MyTricksList/MyTricksList";
 import MyTrickDetails from "./MyTrickDetails/MyTrickDetails";
+import { Link } from "react-router-dom";
 
 const MyTricks: React.FC = () => {
 	const [myTricks, setMyTricks] = useState<MyTrick[]>([]);
@@ -22,20 +23,28 @@ const MyTricks: React.FC = () => {
 		setSelectedTrick(trick);
 	};
 
-	return (
-		<div className={classes.MyTricks}>
-			<div className={classes.List}>
-				<MyTricksList
-					tricks={myTricks}
-					selectedTrick={selectedTrick}
-					selectedTrickChanged={selectedTrickChanged}
-				/>
-			</div>
-			<div className={classes.Details}>
-				<MyTrickDetails id={selectedTrick?.id} />
-			</div>
-		</div>
-	);
+	const content =
+		myTricks.length > 0 ? (
+			<>
+				<div className={classes.List}>
+					<MyTricksList
+						tricks={myTricks}
+						selectedTrick={selectedTrick}
+						selectedTrickChanged={selectedTrickChanged}
+					/>
+				</div>
+				<div className={classes.Details}>
+					<MyTrickDetails id={selectedTrick?.id} />
+				</div>
+			</>
+		) : (
+			<h2 className={classes.AddTricks}>
+				<span>Whoops! It's empty here :(</span>
+				<Link to="/">Let's start learning!</Link>
+			</h2>
+		);
+
+	return <div className={classes.MyTricks}>{content}</div>;
 };
 
 export default MyTricks;

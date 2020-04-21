@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 .MyTricks {
 	height: 100%;
 	display: flex;
@@ -10,5 +12,24 @@
 	.Details {
 		width: 80%;
 		height: 100%;
+	}
+
+	.AddTricks {
+		margin: auto;
+		text-align: center;
+
+		span {
+			color: $purpleColor;
+			display: block;
+		}
+
+		a {
+			color: $whiteColor;
+			background-color: $toxicGreenColor;
+			padding: 2rem;
+			font-size: 2rem;
+			display: block;
+			margin: 7rem 0;
+		}
 	}
 }
