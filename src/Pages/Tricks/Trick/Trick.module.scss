@@ -1,3 +1,5 @@
+@import "../../../variables.scss";
+
 @keyframes rotation {
 	33% {
 		transform: rotate(2deg);
@@ -16,10 +18,10 @@
 	padding: 1.2rem;
 	margin: 1.2rem 0;
 	border-radius: 0.4rem;
-	box-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+	box-shadow: $boxShadow;
 
 	&:hover {
-		box-shadow: 0.1rem 0.2rem 0.6rem rgba(0, 0, 0, 0.5);
+		box-shadow: $boxShadowActive;
 		animation: rotation 0.5s;
 	}
 

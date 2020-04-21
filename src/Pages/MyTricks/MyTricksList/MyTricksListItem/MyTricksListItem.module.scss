@@ -4,21 +4,26 @@
 	padding: 1.2rem;
 	margin: 0 1.2rem;
 	border-radius: 0.4rem;
-	box-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+	box-shadow: $boxShadow;
 	cursor: pointer;
 
 	&:hover {
-		box-shadow: 0.1rem 0.2rem 0.6rem rgba(0, 0, 0, 0.5);
+		box-shadow: $boxShadowActive;
 	}
 
 	&.Active {
 		background-color: $toxicGreenColor;
-		box-shadow: 0.1rem 0.2rem 0.6rem rgba(0, 0, 0, 0.5);
+		box-shadow: $boxShadowActive;
 		transition-property: background-color;
 		transition-duration: 0.3s;
+
+		.Header {
+			color: $navyColorLight;
+		}
 	}
 
 	.Header {
 		font-size: 1.4rem;
+		color: $navyColor;
 	}
 }

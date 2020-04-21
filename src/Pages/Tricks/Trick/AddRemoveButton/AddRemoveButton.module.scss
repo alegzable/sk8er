@@ -6,17 +6,17 @@
 	background-color: $whiteColor;
 	border: none;
 	border-radius: 50%;
-	box-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+	box-shadow: $boxShadow;
 
 	&:focus,
 	&:hover {
-		box-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.3);
+		box-shadow: $boxShadowActive;
 		transition-property: box-shadow;
 		transition-duration: 0.5s;
 	}
 
 	&:active {
 		transition: none;
-		box-shadow: 0.1rem 0.2rem 0.4rem rgba(0, 0, 0, 0.6);
+		box-shadow: $boxShadowActive;
 	}
 }

@@ -6,17 +6,18 @@
 	a {
 		padding: 1.2rem;
 		font-size: 1.6rem;
-		color: $purpleColor;
+		color: $navyColor;
 		display: block;
 	}
 
 	a:hover {
-		background-color: $purpleColorDark;
+		background-color: $navyColorDark;
 	}
 
 	a:active,
 	a.active {
 		background-color: $toxicGreenColor;
+		color: $navyColorLight;
 	}
 }
 
