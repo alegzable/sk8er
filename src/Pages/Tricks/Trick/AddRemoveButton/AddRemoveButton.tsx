@@ -10,6 +10,7 @@ const icons: [ActionTypes, IconDefinition][] = [
 ];
 type AddRemoveButtonProps = {
 	actionType: ActionTypes;
+	title: string;
 	handleOnClick: () => void;
 };
 
@@ -20,7 +21,7 @@ const AddRemoveButton: React.FC<AddRemoveButtonProps> = (props: AddRemoveButtonP
 	])[1];
 
 	return (
-		<button className={classes.AddRemoveButton} onClick={props.handleOnClick}>
+		<button className={classes.AddRemoveButton} onClick={props.handleOnClick} title={props.title}>
 			<FontAwesomeIcon icon={icon} />
 		</button>
 	);
