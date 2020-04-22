@@ -17,6 +17,7 @@
 	color: $toxicGreenColor;
 	font-weight: bold;
 	cursor: pointer;
+	user-select: none;
 
 	span {
 		font-size: 3.4rem;
