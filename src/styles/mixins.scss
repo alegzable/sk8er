@@ -1,0 +1,7 @@
+@mixin DesktopOnly {
+	@media (max-width: 59.99rem) {
+		.DesktopOnly {
+			display: none;
+		}
+	}
+}

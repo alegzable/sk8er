@@ -30,7 +30,7 @@ const MyTricks: React.FC = () => {
 	const content =
 		myTricks.length > 0 ? (
 			<>
-				<div className={classes.List}>
+				<div className={`${classes.List} ${classes.DesktopOnly}`}>
 					<MyTricksList tricks={myTricks} />
 				</div>
 				<div className={classes.Details}>

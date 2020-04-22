@@ -1,4 +1,5 @@
-@import "../../variables.scss";
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .Toolbar {
 	height: $headerHeight;
@@ -14,8 +15,4 @@
 	padding: 0 2rem;
 }
 
-@media (max-width: 59.99rem) {
-	.DesktopOnly {
-		display: none;
-	}
-}
+@include DesktopOnly;

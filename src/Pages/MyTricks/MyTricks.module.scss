@@ -1,16 +1,12 @@
-@import "../../variables.scss";
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
 
 .MyTricks {
 	height: 100%;
 	display: flex;
 
-	.List {
-		width: 20%;
-		height: 100%;
-	}
-
 	.Details {
-		width: 80%;
+		width: 100%;
 		height: 100%;
 	}
 
@@ -30,6 +26,20 @@
 			font-size: 2rem;
 			display: block;
 			margin: 7rem 0;
+		}
+	}
+}
+
+@include DesktopOnly;
+
+@media (min-width: 60rem) {
+	.MyTricks {
+		.List {
+			width: 20%;
+		}
+
+		.Details {
+			width: 80%;
 		}
 	}
 }
