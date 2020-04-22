@@ -4,37 +4,37 @@ import { MyTrick } from "../Tricks/Trick/TrickTypes";
 import localStorageDataService from "../../Services/LocalStorageDataService";
 import MyTricksList from "./MyTricksList/MyTricksList";
 import MyTrickDetails from "./MyTrickDetails/MyTrickDetails";
-import { Link } from "react-router-dom";
+import { Link, Route, useHistory } from "react-router-dom";
 
 const MyTricks: React.FC = () => {
 	const [myTricks, setMyTricks] = useState<MyTrick[]>([]);
-	const [selectedTrick, setSelectedTrick] = useState<MyTrick>();
+	const history = useHistory();
 
 	useEffect(() => {
 		setMyTricks(localStorageDataService.getMyTricks());
 	}, []);
 
 	useEffect(() => {
-		setSelectedTrick(myTricks[0]);
-	}, [myTricks]);
+		const redirectToFirstTrick = (pathname: string, myTricks: MyTrick[]) => {
+			const paramId = pathname.split("/")[2];
+			const firstTrickId = myTricks[0]?.id;
 
-	const selectedTrickChanged = (id: number) => {
-		const trick = myTricks.find((x) => x.id === id);
-		setSelectedTrick(trick);
-	};
+			if (paramId === undefined && firstTrickId !== undefined) {
+				history.push(`/my-tricks/${firstTrickId}`);
+			}
+		};
+
+		redirectToFirstTrick(history.location.pathname, myTricks);
+	}, [history, history.location.pathname, myTricks]);
 
 	const content =
 		myTricks.length > 0 ? (
 			<>
 				<div className={classes.List}>
-					<MyTricksList
-						tricks={myTricks}
-						selectedTrick={selectedTrick}
-						selectedTrickChanged={selectedTrickChanged}
-					/>
+					<MyTricksList tricks={myTricks} />
 				</div>
 				<div className={classes.Details}>
-					<MyTrickDetails id={selectedTrick?.id} />
+					<Route path="/my-tricks/:id" component={MyTrickDetails}></Route>
 				</div>
 			</>
 		) : (

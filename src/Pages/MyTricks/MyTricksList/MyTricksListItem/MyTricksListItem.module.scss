@@ -1,6 +1,7 @@
 @import "../../../../variables.scss";
 
 .MyTricksListItem {
+	display: block;
 	padding: 1.2rem;
 	margin: 0 1.2rem;
 	border-radius: 0.4rem;
@@ -17,13 +18,16 @@
 		transition-property: background-color;
 		transition-duration: 0.3s;
 
-		.Header {
+		.Title {
 			color: $navyColorLight;
 		}
 	}
 
-	.Header {
+	.Title {
 		font-size: 1.4rem;
 		color: $navyColor;
+		display: block;
+		font-weight: bold;
+		padding: 1.2rem;
 	}
 }

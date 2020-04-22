@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import classes from "./Calendar.module.scss";
 import CalendarColumn from "./CalendarColumn/CalendarColumn";
 import { CalendarCellModel } from "./CalendarCell/CalendarCellModel";

@@ -5,12 +5,14 @@ import Video from "../../Tricks/Trick/Video/Video";
 import Calendar from "./Calendar/Calendar";
 import localStorageDataService from "../../../Services/LocalStorageDataService";
 import CalendarDate from "./Calendar/CalendarDate";
+import { RouteComponentProps } from "react-router-dom";
 
 type MyTrickDetailsProps = {
-	id?: number;
+	id: string;
 };
 
-const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ id }) => {
+const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ match }) => {
+	const id = +match.params.id;
 	const [trick, setTrick] = useState<MyTrick | undefined>(undefined);
 
 	useEffect(() => {
@@ -19,9 +21,9 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ id }) => {
 
 	const onCellClick = (date: CalendarDate, marked: boolean) => {
 		if (marked) {
-			localStorageDataService.removePracticeDay(id as number, date);
+			localStorageDataService.removePracticeDay(id, date);
 		} else {
-			localStorageDataService.addPracticeDay(id as number, date);
+			localStorageDataService.addPracticeDay(id, date);
 		}
 
 		setTrick(localStorageDataService.getMyTrick(id));

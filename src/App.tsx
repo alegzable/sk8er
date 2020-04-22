@@ -13,12 +13,8 @@ function App() {
 		<BrowserRouter>
 			<Layout>
 				<Switch>
-					<Route path="/my-tricks">
-						<MyTricks />
-					</Route>
-					<Route path="/">
-						<Tricks />
-					</Route>
+					<Route path="/my-tricks" component={MyTricks}></Route>
+					<Route path="/" component={Tricks} />
 				</Switch>
 			</Layout>
 		</BrowserRouter>

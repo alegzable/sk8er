@@ -1,23 +1,17 @@
 import React from "react";
 import classes from "./MyTricksListItem.module.scss";
 import { MyTrick } from "../../../Tricks/Trick/TrickTypes";
+import { NavLink } from "react-router-dom";
 
 type MyTricksListItemProps = {
 	trick: MyTrick;
-	selected: boolean;
 };
 
-const MyTricksListItem: React.FC<MyTricksListItemProps> = (props: MyTricksListItemProps) => {
-	const classList = [classes.MyTricksListItem];
-
-	if (props.selected) {
-		classList.push(classes.Active);
-	}
-
+const MyTricksListItem: React.FC<MyTricksListItemProps> = ({ trick }) => {
 	return (
-		<div className={classList.join(" ")}>
-			<h3 className={classes.Header}>{props.trick.name}</h3>
-		</div>
+		<NavLink to={`/my-tricks/${trick.id}`} className={classes.MyTricksListItem} activeClassName={classes.Active}>
+			<span className={classes.Title}>{trick.name}</span>
+		</NavLink>
 	);
 };
 
