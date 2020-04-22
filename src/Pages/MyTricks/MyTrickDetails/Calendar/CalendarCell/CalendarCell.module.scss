@@ -5,6 +5,7 @@
 	cursor: pointer;
 	background-color: $greyColorVeryLight;
 	border: 0.2rem solid $whiteColor;
+	user-select: none;
 
 	&:hover {
 		background-color: $toxicGreenColor;
