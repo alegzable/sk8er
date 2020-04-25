@@ -8,20 +8,20 @@
 	user-select: none;
 
 	&:hover {
-		background-color: $toxicGreenColor;
+		background-color: $toxicGreenColorLight;
 		transition-property: background-color;
 		transition-duration: 0.3s;
 	}
-}
 
-.Marked {
-	background-color: $toxicGreenColor;
-}
+	&.Marked {
+		background-color: $toxicGreenColor;
+	}
 
-.Today:not(.Marked) {
-	box-shadow: inset 0 0 0 0.2rem lighten($toxicGreenColor, 30%);
-}
+	&.Today:not(.Marked) {
+		box-shadow: inset 0 0 0 0.2rem lighten($toxicGreenColor, 30%);
+	}
 
-.Weekend:not(.Marked) {
-	background-color: $greyColorLight;
+	&.Weekend:not(.Marked) {
+		background-color: $greyColorLight;
+	}
 }
