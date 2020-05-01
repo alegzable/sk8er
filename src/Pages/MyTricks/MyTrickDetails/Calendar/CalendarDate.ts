@@ -8,24 +8,24 @@ export default class CalendarDate {
 	};
 
 	public addDays = (days: number): CalendarDate => {
-		const date = addDays(this._getDate(), days);
+		const date = addDays(this.getDate(), days);
 
 		return CalendarDate.fromDate(date);
 	};
 
 	public getDayOfWeek = (): number => {
-		const date = this._getDate();
+		const date = this.getDate();
 
 		return date.getDay();
 	};
 
 	public getTimeSinceUnixEpoch = (): number => {
-		return this._getDate().getTime();
+		return this.getDate().getTime();
 	};
 
 	public compare = (other: CalendarDate): CompareResult => {
-		const thisDate = this._getDate();
-		const otherDate = other._getDate();
+		const thisDate = this.getDate();
+		const otherDate = other.getDate();
 
 		if (thisDate > otherDate) {
 			return 1;
@@ -38,6 +38,10 @@ export default class CalendarDate {
 		return 0;
 	};
 
+	public getDate = () => {
+		return new Date(this.year, this.month, this.day);
+	};
+
 	public static today(): CalendarDate {
 		return CalendarDate.fromDate(new Date());
 	}
@@ -45,8 +49,4 @@ export default class CalendarDate {
 	public static fromDate(date: Date): CalendarDate {
 		return new CalendarDate(date.getFullYear(), date.getMonth(), date.getDate());
 	}
-
-	private _getDate = () => {
-		return new Date(this.year, this.month, this.day);
-	};
 }

@@ -1,0 +1,13 @@
+@import "../../styles/variables.scss";
+
+.DatePickerPortal {
+	:global(.bp3-datepicker) {
+		:global(.DayPicker-Day.DayPicker-Day--selected) {
+			background-color: $toxicGreenColor;
+
+			&:hover {
+				background-color: $toxicGreenColor;
+			}
+		}
+	}
+}
