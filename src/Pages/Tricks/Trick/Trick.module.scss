@@ -18,10 +18,10 @@
 	padding: 1.2rem;
 	margin: 1.2rem 0;
 	border-radius: 0.4rem;
-	box-shadow: $boxShadow;
+	box-shadow: $tileboxShadow;
 
 	&:hover {
-		box-shadow: $boxShadowActive;
+		box-shadow: $tileboxShadowActive;
 		animation: rotation 0.5s;
 	}
 

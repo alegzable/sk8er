@@ -1,0 +1,69 @@
+@import "../../../styles/variables.scss";
+
+.DialogPortal {
+	:global(.bp3-dialog-container) {
+		height: 100%;
+	}
+}
+
+.Dialog {
+	max-width: 90%;
+	max-height: 80%;
+	color: $navyColorDark;
+	padding: 1.6rem 1.4rem;
+
+	&:global(.bp3-dialog) {
+		background-color: $whiteColor;
+	}
+
+	.DialogSection {
+		padding-left: 1.2rem;
+		padding-right: 1.2rem;
+	}
+
+	.Header {
+		border-radius: 0.5rem;
+		display: flex;
+		background-color: $whiteColor;
+		padding-top: 1.4rem;
+		padding-bottom: 1.4rem;
+
+		.Title {
+			flex: 1;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.CloseButton {
+			border: none;
+			background-color: $whiteColor;
+			color: $navyColorDark;
+		}
+	}
+
+	.Body {
+		overflow-x: auto;
+		overflow-y: auto;
+		background-color: $whiteColor;
+		padding-top: 1.4rem;
+		padding-bottom: 1.4rem;
+	}
+
+	.Footer {
+		display: flex;
+		align-items: center;
+		background-color: $whiteColor;
+
+		.Actions {
+			display: flex;
+			flex: 1;
+			justify-content: flex-end;
+		}
+	}
+}
+
+@media (min-width: 60rem) {
+	.Dialog {
+		min-width: 42rem;
+	}
+}

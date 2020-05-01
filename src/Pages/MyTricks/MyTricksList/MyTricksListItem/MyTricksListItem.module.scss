@@ -5,16 +5,16 @@
 	padding: 1.2rem;
 	margin: 0 1.2rem;
 	border-radius: 0.4rem;
-	box-shadow: $boxShadow;
+	box-shadow: $tileboxShadow;
 	cursor: pointer;
 
 	&:hover {
-		box-shadow: $boxShadowActive;
+		box-shadow: $tileboxShadowActive;
 	}
 
 	&.Active {
 		background-color: $toxicGreenColor;
-		box-shadow: $boxShadowActive;
+		box-shadow: $tileboxShadowActive;
 		transition-property: background-color;
 		transition-duration: 0.3s;
 

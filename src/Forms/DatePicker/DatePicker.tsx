@@ -9,7 +9,7 @@ import classes from "./DatePicker.module.scss";
 
 type Props = {
 	value?: CalendarDate;
-	onChange: (value?: CalendarDate) => void;
+	onChange: (value: CalendarDate) => void;
 	inputClassName?: string;
 	inputId?: string;
 };

@@ -6,17 +6,17 @@
 	background-color: $whiteColor;
 	border: none;
 	border-radius: 50%;
-	box-shadow: $boxShadow;
+	box-shadow: $tileboxShadow;
 
 	&:focus,
 	&:hover {
-		box-shadow: $boxShadowActive;
+		box-shadow: $tileboxShadowActive;
 		transition-property: box-shadow;
 		transition-duration: 0.5s;
 	}
 
 	&:active {
 		transition: none;
-		box-shadow: $boxShadowActive;
+		box-shadow: $tileboxShadowActive;
 	}
 }

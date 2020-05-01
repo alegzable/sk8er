@@ -1,11 +1,48 @@
-.MyTrickDetails {
-	padding: 1.2rem;
+@import "../../../styles//variables.scss";
 
-	.Video {
-		width: 100%;
+.MyTrickDetails {
+	padding: 2.4rem 1.2rem;
+
+	.Row {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.Score {
+		display: flex;
+
+		.CurrentLevel {
+			white-space: nowrap;
+			margin: auto 0;
+		}
+	}
+
+	.CurrentLevel,
+	.TrickName,
+	.SuccessRate {
+		margin-bottom: 1.2rem;
+	}
+
+	.Column {
+		width: 45%;
 	}
 
 	.Calendar {
-		width: 100%;
+	}
+}
+
+.AddScore {
+	height: 3.2rem;
+	width: 10rem;
+	margin-left: 2rem;
+	border: none;
+	border-radius: 0.3rem;
+	background-color: $toxicGreenColor;
+	color: $navyColorLight;
+	font-weight: bold;
+}
+
+@media (min-width: 60rem) {
+	.Row {
 	}
 }

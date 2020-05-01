@@ -1,0 +1,12 @@
+@import "../../../../../styles/variables.scss";
+
+.SaveButton {
+	height: 3.2rem;
+	width: 100%;
+	margin: 1.2rem 0;
+	border: none;
+	border-radius: 0.3rem;
+	background-color: $toxicGreenColor;
+	color: $navyColorLight;
+	font-weight: bold;
+}

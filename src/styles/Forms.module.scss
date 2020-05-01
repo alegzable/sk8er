@@ -1,0 +1,22 @@
+@import "./variables.scss";
+
+.FormGroup {
+	margin: 1.6rem 0;
+	width: 100%;
+
+	label {
+		display: block;
+		font-size: 1.2rem;
+		margin-bottom: 0.4rem;
+	}
+
+	input {
+		height: $inputHeight;
+		font-size: 1.4rem;
+		box-shadow: $inputBoxShadow;
+
+		&:focus {
+			box-shadow: $inputBoxShadowFocus;
+		}
+	}
+}
