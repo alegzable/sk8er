@@ -14,7 +14,7 @@ type ScoreForm = {
 const ScoreForm: React.FC<ScoreForm> = ({ trickName }) => {
 	const scoreContext = useContext(ScoreDialogContext);
 	const scoreDate = scoreContext.dailyScore?.date;
-	const scoreValue = scoreContext.dailyScore?.score;
+	const scoreValue = scoreContext.dailyScore?.value;
 
 	const onDateChanged = (date: CalendarDate) => {
 		scoreContext.setDailyScore?.(new MaybeDailyScore(date, scoreValue));

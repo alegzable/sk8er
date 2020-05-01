@@ -1,12 +1,45 @@
-import { UserLibraryTrick, LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/Tricks/Trick/TrickTypes";
+import {
+	UserLibraryTrick,
+	LibraryTrick,
+	MyTrick,
+	MyTrickJSON,
+	MyTrickScores,
+	MyTrickScoresJSON,
+} from "../Pages/Tricks/Trick/TrickTypes";
 import CalendarDate from "../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
+import DailyScore from "../Pages/MyTricks/MyTrickDetails/Score/DailyScore";
 
 export const localStorageKeys = {
 	tricks: "TRICKS",
 	myTricks: "MY_TRICKS",
+	scores: "SCORES",
 } as const;
 
 export class LocalStorageDataService {
+	public getTrickScores = (id: number): MyTrickScores | undefined => {
+		const tricksScores = this._getTricksScores();
+		return tricksScores.find((x) => x.id === id);
+	};
+
+	public updateTrickScore = (id: number, score: DailyScore) => {
+		const tricksScores = this._getTricksScores();
+		const trickScores = tricksScores.find((x) => x.id === id);
+
+		if (!trickScores) {
+			tricksScores.push({ id: id, scores: [score] });
+		} else {
+			const dailyScore = trickScores.scores.find((x) => x.date.equals(score.date));
+
+			if (!dailyScore) {
+				trickScores.scores.push(score);
+			} else {
+				dailyScore.value = score.value;
+			}
+		}
+
+		this._addToStorage(localStorageKeys.scores, tricksScores);
+	};
+
 	public getMyTricks = (): MyTrick[] => {
 		const myTricksJSON = this._getFromStorage<MyTrickJSON[]>(localStorageKeys.myTricks) || [];
 
@@ -130,6 +163,19 @@ export class LocalStorageDataService {
 		if (shouldInitiate) {
 			this._addToStorage(localStorageKeys.tricks, tricks);
 		}
+	};
+
+	private _getTricksScores = (): MyTrickScores[] => {
+		const myTrickScoresJSON = this._getFromStorage<MyTrickScoresJSON[]>(localStorageKeys.scores) || [];
+		return myTrickScoresJSON.map((x) => {
+			return {
+				id: x.id,
+				scores: x.scores.map(
+					(score) =>
+						new DailyScore(new CalendarDate(score.date.year, score.date.month, score.date.day), score.value)
+				),
+			};
+		});
 	};
 
 	private _getFromStorage<T>(key: string): T | null {

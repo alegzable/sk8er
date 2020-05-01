@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Dialog, { DialogBody, DialogFooter, DialogFooterActions } from "../../../../../UI/Backdrop/Dialog/Dialog";
 import ScoreForm from "./ScoreForm/ScoreForm";
 import classes from "./ScoreDialog.module.scss";
 import CalendarDate from "../../Calendar/CalendarDate";
 import { MaybeDailyScore } from "../DailyScore";
+import localStorageDataService from "../../../../../Services/LocalStorageDataService";
 
 type ScoreDialogProps = {
 	isOpen: boolean;
@@ -14,6 +15,16 @@ type ScoreDialogProps = {
 
 const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickId, trickName, onClose }) => {
 	const [dailyScore, setDailyScore] = useState<MaybeDailyScore>(new MaybeDailyScore(CalendarDate.today()));
+	let myTrickScores = undefined;
+
+	useEffect(() => {
+		myTrickScores = localStorageDataService.getTrickScores(trickId);
+	}, [trickId]);
+
+	const saveScore = (maybeDailyScore: MaybeDailyScore) => {
+		localStorageDataService.updateTrickScore(trickId, maybeDailyScore.toDailyScore());
+		onClose();
+	};
 
 	return (
 		<Dialog isOpen={isOpen} title="Add Score" onClose={onClose}>
@@ -24,7 +35,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickId, trickName, o
 			</DialogBody>
 			<DialogFooter>
 				<DialogFooterActions>
-					<button className={classes.SaveButton} onClick={onClose}>
+					<button className={classes.SaveButton} onClick={() => saveScore(dailyScore)}>
 						Save
 					</button>
 				</DialogFooterActions>
