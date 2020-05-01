@@ -3,10 +3,10 @@ import classes from "./MyTrickDetails.module.scss";
 import { MyTrick } from "../../Tricks/Trick/TrickTypes";
 import Video from "../../Tricks/Trick/Video/Video";
 import Calendar from "./Calendar/Calendar";
-import localStorageDataService from "../../../Services/LocalStorage/LocalStorageDataService";
 import CalendarDate from "./Calendar/CalendarDate";
 import { RouteComponentProps } from "react-router-dom";
 import ScoreDialog from "./Score/ScoreDialog/ScoreDialog";
+import localStorageDataService from "../../../Services/LocalStorageDataService";
 
 type MyTrickDetailsProps = {
 	id: string;
