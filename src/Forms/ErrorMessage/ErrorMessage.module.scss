@@ -1,0 +1,8 @@
+@import "../../styles/variables.scss";
+
+.ErrorMessage {
+	display: block;
+	color: $redColor;
+	margin-top: 0.4rem;
+	font-size: 1rem;
+}

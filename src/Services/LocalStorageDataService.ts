@@ -16,12 +16,22 @@ export const localStorageKeys = {
 } as const;
 
 export class LocalStorageDataService {
+	public getTrickScore = (id: number, date: CalendarDate): DailyScore | undefined => {
+		const trickScores = this.getTrickScores(id);
+
+		return trickScores?.scores?.find((x) => x.date.equals(date));
+	};
+
 	public getTrickScores = (id: number): MyTrickScores | undefined => {
 		const tricksScores = this._getTricksScores();
 		return tricksScores.find((x) => x.id === id);
 	};
 
 	public updateTrickScore = (id: number, score: DailyScore) => {
+		if (score.date === undefined || score.value === undefined) {
+			throw new Error("Invalid date or value");
+		}
+
 		const tricksScores = this._getTricksScores();
 		const trickScores = tricksScores.find((x) => x.id === id);
 

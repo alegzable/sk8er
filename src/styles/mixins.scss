@@ -5,3 +5,19 @@
 		}
 	}
 }
+
+@mixin Button {
+	height: 3.2rem;
+	line-height: 3.2rem;
+	border: none;
+	border-radius: 0.3rem;
+	background-color: $toxicGreenColor;
+	color: $navyColorLight;
+	font-weight: bold;
+	text-align: center;
+
+	&[disabled] {
+		background-color: transparentize($navyColorDark, 0.85);
+		color: transparentize($navyColorDark, 0.4);
+	}
+}

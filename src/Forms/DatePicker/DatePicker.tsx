@@ -9,18 +9,19 @@ import classes from "./DatePicker.module.scss";
 
 type Props = {
 	value?: CalendarDate;
-	onChange: (value: CalendarDate) => void;
+	inputName: string;
+	onChange: (value?: CalendarDate) => void;
 	inputClassName?: string;
 	inputId?: string;
 };
 
-const DatePicker: React.FC<Props> = ({ value, onChange, inputClassName, inputId }) => {
+const DatePicker: React.FC<Props> = ({ value, inputName, onChange, inputClassName, inputId }) => {
 	const handleOnChange = (selectedDate: Date): void => {
 		if (selectedDate === null) {
-			return;
+			onChange(undefined);
+		} else {
+			onChange(CalendarDate.fromDate(selectedDate));
 		}
-
-		onChange(CalendarDate.fromDate(selectedDate));
 	};
 
 	const popoverProps: Partial<IPopoverProps> = {
@@ -32,6 +33,7 @@ const DatePicker: React.FC<Props> = ({ value, onChange, inputClassName, inputId 
 	const inputProps: HTMLInputProps & IInputGroupProps = {
 		className: inputClassName,
 		id: inputId,
+		name: inputName,
 	};
 
 	return (

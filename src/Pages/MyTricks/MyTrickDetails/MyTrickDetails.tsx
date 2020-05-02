@@ -4,7 +4,7 @@ import { MyTrick } from "../../Tricks/Trick/TrickTypes";
 import Video from "../../Tricks/Trick/Video/Video";
 import Calendar from "./Calendar/Calendar";
 import CalendarDate from "./Calendar/CalendarDate";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Route, NavLink, useHistory } from "react-router-dom";
 import ScoreDialog from "./Score/ScoreDialog/ScoreDialog";
 import localStorageDataService from "../../../Services/LocalStorageDataService";
 
@@ -15,7 +15,7 @@ type MyTrickDetailsProps = {
 const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ match }) => {
 	const id = +match.params.id;
 	const [trick, setTrick] = useState<MyTrick | undefined>(undefined);
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const history = useHistory();
 
 	useEffect(() => {
 		setTrick(localStorageDataService.getMyTrick(id));
@@ -31,21 +31,31 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 		setTrick(localStorageDataService.getMyTrick(id));
 	};
 
+	const onDialogClose = () => {
+		history.push(`/my-tricks/${id}`);
+	};
+
+	console.log(history.location.pathname);
+	const addScorePath = `/my-tricks/${id}/add-score`;
 	const details = trick ? (
 		<>
 			<h1 className={classes.TrickName}>{trick.name}</h1>
 			<div className={classes.Score}>
 				<h3 className={classes.CurrentLevel}>Your lvl: 0</h3>
-				<button className={classes.AddScore} onClick={() => setIsDialogOpen(true)}>
-					Add Score
-				</button>
+
+				<NavLink className={classes.AddScore} to={addScorePath}>
+					<span>Add Score</span>
+				</NavLink>
 			</div>
-			<ScoreDialog
-				isOpen={isDialogOpen}
-				trickId={trick.id}
-				trickName={trick.name}
-				onClose={() => setIsDialogOpen(false)}
-			/>
+
+			<Route path="/my-tricks/:id/add-score">
+				<ScoreDialog
+					isOpen={history.location.pathname === addScorePath}
+					trickId={trick.id}
+					trickName={trick.name}
+					onClose={onDialogClose}
+				/>
+			</Route>
 			<div className={classes.Column}>
 				<Video url={trick.videoUrl} title={trick.name} />
 			</div>

@@ -1,0 +1,22 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.SubmitButton {
+	width: 100%;
+	margin: 1.2rem 0;
+
+	@include Button();
+
+	.Spinner {
+		animation: rotation 1s linear infinite;
+	}
+}
