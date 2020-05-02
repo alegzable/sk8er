@@ -16,6 +16,25 @@ export const localStorageKeys = {
 } as const;
 
 export class LocalStorageDataService {
+	public getTrickLevel = (id: number): number => {
+		const trickScores = this.getTrickScores(id);
+
+		if (trickScores === undefined || trickScores.scores.length === 0) {
+			return 0;
+		}
+
+		const orderedScores = trickScores.scores.sort((score1: DailyScore, score2: DailyScore) =>
+			score1.date.compare(score2.date)
+		);
+		const scoresToCalculateLvl = 10;
+		const lvl =
+			orderedScores
+				.slice(Math.max(orderedScores.length - scoresToCalculateLvl, 0))
+				.reduce((a, b) => a + b.value, 0) / scoresToCalculateLvl;
+
+		return Math.round(lvl);
+	};
+
 	public getTrickScore = (id: number, date: CalendarDate): DailyScore | undefined => {
 		const trickScores = this.getTrickScores(id);
 

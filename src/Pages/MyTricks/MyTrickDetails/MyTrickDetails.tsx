@@ -15,11 +15,16 @@ type MyTrickDetailsProps = {
 const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ match }) => {
 	const id = +match.params.id;
 	const [trick, setTrick] = useState<MyTrick | undefined>(undefined);
+	const [level, setLevel] = useState<number>(0);
 	const history = useHistory();
 
 	useEffect(() => {
 		setTrick(localStorageDataService.getMyTrick(id));
 	}, [id]);
+
+	useEffect(() => {
+		setLevel(localStorageDataService.getTrickLevel(id));
+	}, [id, history.location.pathname]);
 
 	const onCellClick = (date: CalendarDate, marked: boolean) => {
 		if (marked) {
@@ -35,13 +40,12 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 		history.push(`/my-tricks/${id}`);
 	};
 
-	console.log(history.location.pathname);
 	const addScorePath = `/my-tricks/${id}/add-score`;
 	const details = trick ? (
 		<>
 			<h1 className={classes.TrickName}>{trick.name}</h1>
 			<div className={classes.Score}>
-				<h3 className={classes.CurrentLevel}>Your lvl: 0</h3>
+				<h3 className={classes.CurrentLevel}>Your lvl: {level}</h3>
 
 				<NavLink className={classes.AddScore} to={addScorePath}>
 					<span>Add Score</span>

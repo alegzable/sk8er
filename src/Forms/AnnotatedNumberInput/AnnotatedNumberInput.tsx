@@ -38,7 +38,7 @@ const AnnotatedNumberInput: React.FC<AnnotatedNumberInputProps> = ({ value, name
 				ref={inputRef}
 				type="number"
 				name={name}
-				value={value || undefined}
+				value={value}
 				id={id}
 				className={classes.AnnotatedNumberInput}
 				onFocus={() => setFocused(true)}

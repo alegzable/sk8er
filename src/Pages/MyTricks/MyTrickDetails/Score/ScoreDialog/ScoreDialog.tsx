@@ -53,9 +53,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickId, trickName, o
 		if (value !== undefined) {
 			const dailyScore = localStorageDataService.getTrickScore(trickId, value);
 
-			if (dailyScore !== undefined) {
-				formik.setFieldValue(nameof<ScoreFormFields>("scoreValue"), dailyScore.value);
-			}
+			formik.setFieldValue(nameof<ScoreFormFields>("scoreValue"), dailyScore?.value ?? "");
 		}
 	};
 
