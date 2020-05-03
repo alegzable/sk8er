@@ -7,6 +7,7 @@ import CalendarDate from "./Calendar/CalendarDate";
 import { RouteComponentProps, Route, NavLink, useHistory } from "react-router-dom";
 import ScoreDialog from "./Score/ScoreDialog/ScoreDialog";
 import localStorageDataService from "../../../Services/LocalStorageDataService";
+import ScoreChart from "./Score/ScoreChart/ScoreChart";
 
 type MyTrickDetailsProps = {
 	id: string;
@@ -60,6 +61,10 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 					onClose={onDialogClose}
 				/>
 			</Route>
+
+			<div className={classes.ScoreChart}>
+				<ScoreChart trickId={trick.id} />
+			</div>
 			<div className={classes.Column}>
 				<Video url={trick.videoUrl} title={trick.name} />
 			</div>

@@ -199,10 +199,15 @@ export class LocalStorageDataService {
 		return myTrickScoresJSON.map((x) => {
 			return {
 				id: x.id,
-				scores: x.scores.map(
-					(score) =>
-						new DailyScore(new CalendarDate(score.date.year, score.date.month, score.date.day), score.value)
-				),
+				scores: x.scores
+					.map(
+						(score) =>
+							new DailyScore(
+								new CalendarDate(score.date.year, score.date.month, score.date.day),
+								score.value
+							)
+					)
+					.sort((score1: DailyScore, score2: DailyScore) => score1.date.compare(score2.date)),
 			};
 		});
 	};

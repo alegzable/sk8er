@@ -4,7 +4,7 @@ import { IPopoverProps, IInputGroupProps } from "@blueprintjs/core/lib/esm/compo
 import { HTMLInputProps } from "@blueprintjs/core/lib/esm/common";
 import "./DatePicker.module.scss";
 import CalendarDate from "../../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
-import { dateBoundaries, dateFormat, formatDate, parseDate } from "../../Utils/dateUtils";
+import { dateBoundaries, dateFormats, formatDate, parseDate } from "../../Utils/dateUtils";
 import classes from "./DatePicker.module.scss";
 
 type Props = {
@@ -44,7 +44,7 @@ const DatePicker: React.FC<Props> = ({ value, inputName, onChange, inputClassNam
 			inputProps={inputProps}
 			formatDate={formatDate}
 			parseDate={parseDate}
-			placeholder={dateFormat}
+			placeholder={dateFormats.date}
 			minDate={dateBoundaries.min}
 			maxDate={dateBoundaries.max}
 			value={value?.getDate()}

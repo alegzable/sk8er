@@ -22,14 +22,18 @@ export function getYearAbbr(year: number) {
 
 export const monthsAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const;
 export const weekDaysAbbr = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
-export const dateFormat = "MM/DD/YYYY";
+export const dateFormats = {
+	date: "MM/DD/YYYY",
+	monthAndDay: "MMM DD",
+};
+
 export const dateBoundaries = {
 	min: new Date(1900, 1, 1),
 	max: new Date(2100, 12, 31),
 };
 
-export function formatDate(date: Date): string {
-	return moment(date).format(dateFormat);
+export function formatDate(date: Date, format?: string): string {
+	return moment(date).format(format ?? dateFormats.date);
 }
 
 export function parseDate(value: string): Date {
@@ -37,7 +41,7 @@ export function parseDate(value: string): Date {
 		return invalidDate;
 	}
 
-	const momentDate = moment(value, dateFormat, true);
+	const momentDate = moment(value, dateFormats.date, true);
 	if (momentDate === null || momentDate === undefined || momentDate.isValid() === false) {
 		return invalidDate;
 	}
