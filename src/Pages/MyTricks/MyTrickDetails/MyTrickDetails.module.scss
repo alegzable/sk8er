@@ -5,13 +5,9 @@
 	padding: 2.4rem 1.2rem;
 
 	.Row {
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		margin-bottom: 2rem;
-
 		.Column {
-			min-width: 49%;
+			width: 100%;
+			margin-bottom: 2rem;
 			padding: 2rem 4rem;
 			border: $veryLightBorder;
 		}
@@ -19,6 +15,7 @@
 
 	.Score {
 		display: flex;
+		margin-bottom: 2rem;
 
 		.CurrentLevel {
 			white-space: nowrap;
@@ -48,7 +45,17 @@
 	}
 }
 
-@media (min-width: 40rem) {
-	.Row {
+@media (min-width: 60rem) {
+	.MyTrickDetails {
+		.Row {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 2rem;
+
+			.Column {
+				width: 49%;
+				margin-bottom: 0;
+			}
+		}
 	}
 }

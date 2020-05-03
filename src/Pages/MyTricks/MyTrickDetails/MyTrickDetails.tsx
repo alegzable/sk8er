@@ -55,21 +55,19 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 	const details = trick ? (
 		<>
 			<h1 className={classes.TrickName}>{trick.name}</h1>
-			<div className={classes.Row}>
-				<div className={classes.Score}>
-					<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(trick)}</h3>
-					<NavLink className={classes.AddScore} to={addScorePath}>
-						<span>Add Score</span>
-					</NavLink>
-					<Route path="/my-tricks/:id/add-score">
-						<ScoreDialog
-							isOpen={history.location.pathname === addScorePath}
-							trick={trick}
-							onClose={redirectToTrickDetails}
-							onSave={onScoreSave}
-						/>
-					</Route>
-				</div>
+			<div className={classes.Score}>
+				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(trick)}</h3>
+				<NavLink className={classes.AddScore} to={addScorePath}>
+					<span>Add Score</span>
+				</NavLink>
+				<Route path="/my-tricks/:id/add-score">
+					<ScoreDialog
+						isOpen={history.location.pathname === addScorePath}
+						trick={trick}
+						onClose={redirectToTrickDetails}
+						onSave={onScoreSave}
+					/>
+				</Route>
 			</div>
 			<div className={classes.Row}>
 				<div className={`${classes.Column} ${classes.ScoreChart}`}>
