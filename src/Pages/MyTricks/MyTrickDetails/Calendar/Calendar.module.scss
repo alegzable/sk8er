@@ -3,9 +3,11 @@
 .Calendar {
 	display: flex;
 	flex-direction: column;
+	min-width: 30rem;
 
 	.CalendarWithSlider {
 		display: flex;
+		justify-content: space-between;
 
 		.ColumnsWrapper {
 			display: flex;

@@ -23,5 +23,7 @@ $inputBoxShadow: inset 0 0 0 0.1rem transparentize($navyColor, 0.7),
 	inset 0 0.1rem 0.1rem transparentize($navyColor, 0.7);
 $inputBoxShadowFocus: 0 0 0 1px lighten($navyColorLight, 35%), $inputBoxShadow;
 
+$veryLightBorder: 0.1rem solid transparentize($navyColorDark, 0.85);
+
 $headerHeight: 5.6rem;
 $inputHeight: 3.2rem;

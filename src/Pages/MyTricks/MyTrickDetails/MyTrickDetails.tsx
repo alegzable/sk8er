@@ -55,36 +55,39 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 	const details = trick ? (
 		<>
 			<h1 className={classes.TrickName}>{trick.name}</h1>
-			<div className={classes.Score}>
-				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(trick)}</h3>
-
-				<NavLink className={classes.AddScore} to={addScorePath}>
-					<span>Add Score</span>
-				</NavLink>
-			</div>
-
-			<Route path="/my-tricks/:id/add-score">
-				<ScoreDialog
-					isOpen={history.location.pathname === addScorePath}
-					trick={trick}
-					onClose={redirectToTrickDetails}
-					onSave={onScoreSave}
-				/>
-			</Route>
-
-			<div className={classes.ScoreChart}>
-				<ScoreChart trick={trick} />
-			</div>
-			<div className={classes.Column}>
-				<Video url={trick.videoUrl} title={trick.name} />
+			<div className={classes.Row}>
+				<div className={classes.Score}>
+					<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(trick)}</h3>
+					<NavLink className={classes.AddScore} to={addScorePath}>
+						<span>Add Score</span>
+					</NavLink>
+					<Route path="/my-tricks/:id/add-score">
+						<ScoreDialog
+							isOpen={history.location.pathname === addScorePath}
+							trick={trick}
+							onClose={redirectToTrickDetails}
+							onSave={onScoreSave}
+						/>
+					</Route>
+				</div>
 			</div>
 			<div className={classes.Row}>
-				<div className={classes.Calendar}>
-					<Calendar
-						markedDates={trick.practiceDates.map((x) => x.date)}
-						onCellClick={onCellClick}
-						title={"Have you practiced today?"}
-					/>
+				<div className={`${classes.Column} ${classes.ScoreChart}`}>
+					<ScoreChart trick={trick} />
+				</div>
+				<div className={classes.Column}>
+					<div className={classes.Calendar}>
+						<Calendar
+							markedDates={trick.practiceDates.map((x) => x.date)}
+							onCellClick={onCellClick}
+							title={"Have you practiced today?"}
+						/>
+					</div>
+				</div>
+			</div>
+			<div className={classes.Row}>
+				<div className={`${classes.Column} ${classes.Video}`}>
+					<Video url={trick.videoUrl} title={trick.name} />
 				</div>
 			</div>
 		</>

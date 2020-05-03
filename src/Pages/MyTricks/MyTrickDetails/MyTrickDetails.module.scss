@@ -7,10 +7,14 @@
 	.Row {
 		display: flex;
 		justify-content: space-between;
-	}
+		flex-wrap: wrap;
+		margin-bottom: 2rem;
 
-	.ScoreChart {
-		width: 50%;
+		.Column {
+			min-width: 49%;
+			padding: 2rem 4rem;
+			border: $veryLightBorder;
+		}
 	}
 
 	.Score {
@@ -29,21 +33,22 @@
 		}
 	}
 
+	.ScoreChart {
+		display: flex;
+	}
+
 	.CurrentLevel,
 	.TrickName,
 	.SuccessRate {
 		margin-bottom: 1.2rem;
 	}
 
-	.Column {
-		width: 45%;
-	}
-
-	.Calendar {
+	.Video {
+		flex-grow: 1;
 	}
 }
 
-@media (min-width: 60rem) {
+@media (min-width: 40rem) {
 	.Row {
 	}
 }
