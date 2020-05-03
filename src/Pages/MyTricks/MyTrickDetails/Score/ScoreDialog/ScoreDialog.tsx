@@ -3,8 +3,6 @@ import Dialog, { DialogBody, DialogFooter, DialogFooterActions } from "../../../
 import classes from "./ScoreDialog.module.scss";
 import formClasses from "../../../../../styles/Forms.module.scss";
 import CalendarDate from "../../Calendar/CalendarDate";
-import DailyScore from "../DailyScore";
-import localStorageDataService from "../../../../../Services/LocalStorageDataService";
 import { scoreFormValidationSchema } from "./scoreFormValidationSchema";
 import AnnotatedNumberInput from "../../../../../Forms/AnnotatedNumberInput/AnnotatedNumberInput";
 import { useFormik } from "formik";
@@ -13,32 +11,29 @@ import { nameof } from "../../../../../Utils/stringUtils";
 import ScoreFormFields from "./ScoreFormFields";
 import ErrorMessage from "../../../../../Forms/ErrorMessage/ErrorMessage";
 import SubmitButton from "../../../../../Forms/SubmitButton/SubmitButton";
-import { useHistory } from "react-router-dom";
+import { MyTrick } from "../../../../Tricks/Trick/TrickTypes";
 
 type ScoreDialogProps = {
 	isOpen: boolean;
-	trickId: number;
-	trickName: string;
+	trick: MyTrick;
 	onClose: () => void;
+	onSave: (date: CalendarDate, score: number) => void;
 };
 
-const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickId, trickName, onClose }) => {
-	const history = useHistory();
-
+const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trick, onClose, onSave }) => {
 	const saveScore = (score: ScoreFormFields) => {
-		localStorageDataService.updateTrickScore(
-			trickId,
-			new DailyScore(score.scoreDate as CalendarDate, score.scoreValue as number)
-		);
+		onSave(score.scoreDate as CalendarDate, score.scoreValue as number);
+	};
 
-		history.push(`/my-tricks/${trickId}`);
+	const getScore = (date: CalendarDate): number | undefined => {
+		return trick.practiceDates?.find((x) => x.date.equals(date))?.score;
 	};
 
 	const getInitialValues = (): ScoreFormFields => {
 		const today = CalendarDate.today();
-		const dailyScore = localStorageDataService.getTrickScore(trickId, today);
+		const score = getScore(today);
 
-		return { scoreDate: dailyScore?.date ?? today, scoreValue: dailyScore?.value };
+		return { scoreDate: today, scoreValue: score };
 	};
 
 	const formik = useFormik<ScoreFormFields>({
@@ -51,9 +46,9 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickId, trickName, o
 		formik.setFieldValue(nameof<ScoreFormFields>("scoreDate"), value);
 
 		if (value !== undefined) {
-			const dailyScore = localStorageDataService.getTrickScore(trickId, value);
+			const score = getScore(value);
 
-			formik.setFieldValue(nameof<ScoreFormFields>("scoreValue"), dailyScore?.value ?? "");
+			formik.setFieldValue(nameof<ScoreFormFields>("scoreValue"), score ?? "");
 		}
 	};
 
@@ -64,7 +59,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickId, trickName, o
 					<div>
 						<div className={classes.Description}>
 							<p>Been practicing for a while? Rate yourself!</p>
-							<p>Try performing {trickName} 10 times in a row and see how many were successful!</p>
+							<p>Try performing {trick.name} 10 times in a row and see how many were successful!</p>
 							<p>Your scores will be displayed in a graph to show your progress over time.</p>
 						</div>
 						<div className={classes.Inputs}>

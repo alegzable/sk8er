@@ -8,6 +8,7 @@ import { RouteComponentProps, Route, NavLink, useHistory } from "react-router-do
 import ScoreDialog from "./Score/ScoreDialog/ScoreDialog";
 import localStorageDataService from "../../../Services/LocalStorageDataService";
 import ScoreChart from "./Score/ScoreChart/ScoreChart";
+import PracticeDate from "./Score/DailyScore";
 
 type MyTrickDetailsProps = {
 	id: string;
@@ -16,15 +17,10 @@ type MyTrickDetailsProps = {
 const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ match }) => {
 	const id = +match.params.id;
 	const [trick, setTrick] = useState<MyTrick | undefined>(undefined);
-	const [level, setLevel] = useState<number>(0);
 	const history = useHistory();
 
 	useEffect(() => {
 		setTrick(localStorageDataService.getMyTrick(id));
-	}, [id]);
-
-	useEffect(() => {
-		setLevel(localStorageDataService.getTrickLevel(id));
 	}, [id, history.location.pathname]);
 
 	const onCellClick = (date: CalendarDate, marked: boolean) => {
@@ -37,8 +33,22 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 		setTrick(localStorageDataService.getMyTrick(id));
 	};
 
-	const onDialogClose = () => {
-		history.push(`/my-tricks/${id}`);
+	const redirectToTrickDetails = () => history.push(`/my-tricks/${id}`);
+	const onScoreSave = (date: CalendarDate, score: number) => {
+		localStorageDataService.updateTrickScore(id, new PracticeDate(date, score));
+
+		redirectToTrickDetails();
+	};
+
+	const calculateTrickLevel = (trick: MyTrick): number => {
+		const scoredPracticeDates = trick.practiceDates.filter((x) => x.score !== undefined);
+		const scoresToCalculateLvl = 10;
+		const lvl =
+			scoredPracticeDates
+				.slice(Math.max(scoredPracticeDates.length - scoresToCalculateLvl, 0))
+				.reduce((a, b) => a + (b.score as number), 0) / scoresToCalculateLvl;
+
+		return Math.round(lvl);
 	};
 
 	const addScorePath = `/my-tricks/${id}/add-score`;
@@ -46,7 +56,7 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 		<>
 			<h1 className={classes.TrickName}>{trick.name}</h1>
 			<div className={classes.Score}>
-				<h3 className={classes.CurrentLevel}>Your lvl: {level}</h3>
+				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(trick)}</h3>
 
 				<NavLink className={classes.AddScore} to={addScorePath}>
 					<span>Add Score</span>
@@ -56,14 +66,14 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 			<Route path="/my-tricks/:id/add-score">
 				<ScoreDialog
 					isOpen={history.location.pathname === addScorePath}
-					trickId={trick.id}
-					trickName={trick.name}
-					onClose={onDialogClose}
+					trick={trick}
+					onClose={redirectToTrickDetails}
+					onSave={onScoreSave}
 				/>
 			</Route>
 
 			<div className={classes.ScoreChart}>
-				<ScoreChart trickId={trick.id} />
+				<ScoreChart trick={trick} />
 			</div>
 			<div className={classes.Column}>
 				<Video url={trick.videoUrl} title={trick.name} />
@@ -71,7 +81,7 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 			<div className={classes.Row}>
 				<div className={classes.Calendar}>
 					<Calendar
-						markedDates={trick.practiceDates}
+						markedDates={trick.practiceDates.map((x) => x.date)}
 						onCellClick={onCellClick}
 						title={"Have you practiced today?"}
 					/>

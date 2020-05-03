@@ -1,72 +1,35 @@
-import {
-	UserLibraryTrick,
-	LibraryTrick,
-	MyTrick,
-	MyTrickJSON,
-	MyTrickScores,
-	MyTrickScoresJSON,
-} from "../Pages/Tricks/Trick/TrickTypes";
+import { UserLibraryTrick, LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/Tricks/Trick/TrickTypes";
 import CalendarDate from "../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
-import DailyScore from "../Pages/MyTricks/MyTrickDetails/Score/DailyScore";
+import PracticeDate from "../Pages/MyTricks/MyTrickDetails/Score/DailyScore";
 
 export const localStorageKeys = {
 	tricks: "TRICKS",
 	myTricks: "MY_TRICKS",
-	scores: "SCORES",
 } as const;
 
 export class LocalStorageDataService {
-	public getTrickLevel = (id: number): number => {
-		const trickScores = this.getTrickScores(id);
-
-		if (trickScores === undefined || trickScores.scores.length === 0) {
-			return 0;
-		}
-
-		const orderedScores = trickScores.scores.sort((score1: DailyScore, score2: DailyScore) =>
-			score1.date.compare(score2.date)
-		);
-		const scoresToCalculateLvl = 10;
-		const lvl =
-			orderedScores
-				.slice(Math.max(orderedScores.length - scoresToCalculateLvl, 0))
-				.reduce((a, b) => a + b.value, 0) / scoresToCalculateLvl;
-
-		return Math.round(lvl);
-	};
-
-	public getTrickScore = (id: number, date: CalendarDate): DailyScore | undefined => {
-		const trickScores = this.getTrickScores(id);
-
-		return trickScores?.scores?.find((x) => x.date.equals(date));
-	};
-
-	public getTrickScores = (id: number): MyTrickScores | undefined => {
-		const tricksScores = this._getTricksScores();
-		return tricksScores.find((x) => x.id === id);
-	};
-
-	public updateTrickScore = (id: number, score: DailyScore) => {
-		if (score.date === undefined || score.value === undefined) {
+	public updateTrickScore = (id: number, score: PracticeDate) => {
+		if (score.date === undefined || score.score === undefined) {
 			throw new Error("Invalid date or value");
 		}
 
-		const tricksScores = this._getTricksScores();
-		const trickScores = tricksScores.find((x) => x.id === id);
+		const myTricks = this.getMyTricks();
+		const myTrick = myTricks.find((x) => x.id === id);
 
-		if (!trickScores) {
-			tricksScores.push({ id: id, scores: [score] });
-		} else {
-			const dailyScore = trickScores.scores.find((x) => x.date.equals(score.date));
-
-			if (!dailyScore) {
-				trickScores.scores.push(score);
-			} else {
-				dailyScore.value = score.value;
-			}
+		if (myTrick === undefined) {
+			throw new Error("Trick not found");
 		}
 
-		this._addToStorage(localStorageKeys.scores, tricksScores);
+		const practiceDates = myTrick.practiceDates;
+		const practiceDate = practiceDates.find((x) => x.date.equals(score.date));
+
+		if (!practiceDate) {
+			practiceDates.push(score);
+		} else {
+			practiceDate.score = score.score;
+		}
+
+		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
 	public getMyTricks = (): MyTrick[] => {
@@ -77,20 +40,31 @@ export class LocalStorageDataService {
 				id: x.id,
 				name: x.name,
 				videoUrl: x.videoUrl,
-				practiceDates: x.practiceDates.map(
-					(practiceDay) => new CalendarDate(practiceDay.year, practiceDay.month, practiceDay.day)
-				),
+				practiceDates: x.practiceDates
+					.map((practiceDay) => {
+						return new PracticeDate(
+							new CalendarDate(practiceDay.date.year, practiceDay.date.month, practiceDay.date.day),
+							practiceDay.score
+						);
+					})
+					.sort((date1: PracticeDate, date2: PracticeDate) => date1.date.compare(date2.date)),
 			};
 		});
 	};
 
-	public getMyTrick = (id?: number): MyTrick | undefined => {
+	public getMyTrick = (id?: number): MyTrick => {
 		if (!id) {
-			return undefined;
+			throw new Error("Trick not found");
 		}
 
 		const myTricks = this.getMyTricks();
-		return myTricks.find((x) => x.id === id);
+		const myTrick = myTricks.find((x) => x.id === id);
+
+		if (myTrick === undefined) {
+			throw new Error("Trick not found");
+		}
+
+		return myTrick;
 	};
 
 	public addPracticeDay = (id: number, date: CalendarDate) => {
@@ -101,13 +75,13 @@ export class LocalStorageDataService {
 			return;
 		}
 
-		const alreadyAdded = trick.practiceDates.findIndex((x) => x.equals(date)) !== -1;
+		const alreadyAdded = trick.practiceDates.findIndex((x) => x.date.equals(date)) !== -1;
 
 		if (alreadyAdded) {
 			return;
 		}
 
-		trick.practiceDates.push(date);
+		trick.practiceDates.push(new PracticeDate(date));
 
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
@@ -120,7 +94,7 @@ export class LocalStorageDataService {
 			return;
 		}
 
-		const dayToRemoveIndex = trick.practiceDates.findIndex((x) => x.equals(date));
+		const dayToRemoveIndex = trick.practiceDates.findIndex((x) => x.date.equals(date));
 
 		if (dayToRemoveIndex === -1) {
 			return;
@@ -194,23 +168,23 @@ export class LocalStorageDataService {
 		}
 	};
 
-	private _getTricksScores = (): MyTrickScores[] => {
-		const myTrickScoresJSON = this._getFromStorage<MyTrickScoresJSON[]>(localStorageKeys.scores) || [];
-		return myTrickScoresJSON.map((x) => {
-			return {
-				id: x.id,
-				scores: x.scores
-					.map(
-						(score) =>
-							new DailyScore(
-								new CalendarDate(score.date.year, score.date.month, score.date.day),
-								score.value
-							)
-					)
-					.sort((score1: DailyScore, score2: DailyScore) => score1.date.compare(score2.date)),
-			};
-		});
-	};
+	// private _getTricksScores = (): MyTrickScores[] => {
+	// 	const myTrickScoresJSON = this._getFromStorage<MyTrickScoresJSON[]>(localStorageKeys.scores) || [];
+	// 	return myTrickScoresJSON.map((x) => {
+	// 		return {
+	// 			id: x.id,
+	// 			scores: x.scores
+	// 				.map(
+	// 					(score) =>
+	// 						new PracticeDate(
+	// 							new CalendarDate(score.date.year, score.date.month, score.date.day),
+	// 							score.value
+	// 						)
+	// 				)
+	// 				.sort((score1: PracticeDate, score2: PracticeDate) => score1.date.compare(score2.date)),
+	// 		};
+	// 	});
+	// };
 
 	private _getFromStorage<T>(key: string): T | null {
 		const json = localStorage.getItem(key);

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import classes from "./ScoreChart.module.scss";
 import { VictoryChart, VictoryBar, VictoryZoomContainer, VictoryLabel, VictoryAxis } from "victory";
-import localStorageDataService from "../../../../../Services/LocalStorageDataService";
 import { nameof } from "../../../../../Utils/stringUtils";
-import { useHistory } from "react-router-dom";
 import { formatDate, dateFormats } from "../../../../../Utils/dateUtils";
+import { MyTrick } from "../../../../Tricks/Trick/TrickTypes";
 
 type ScoreChartProps = {
-	trickId: number;
+	trick: MyTrick;
 };
 
 type ChartData = {
@@ -15,19 +14,18 @@ type ChartData = {
 	score: number;
 };
 
-const ScoreChart: React.FC<ScoreChartProps> = ({ trickId }) => {
-	const history = useHistory();
+const ScoreChart: React.FC<ScoreChartProps> = ({ trick }) => {
 	const [chartData, setChartData] = useState<ChartData[]>([]);
 
 	useEffect(() => {
-		const trickScores = localStorageDataService.getTrickScores(trickId);
+		const trickScores = trick.practiceDates.filter((x) => x.score !== undefined);
 		const chartData =
-			trickScores?.scores.map((x) => {
-				return { date: x.date.getDate().toString(), score: x.value };
+			trickScores.map((x) => {
+				return { date: x.date.getDate().toString(), score: x.score as number };
 			}) ?? [];
 
 		setChartData(chartData);
-	}, [trickId, history.location.pathname]);
+	}, [trick]);
 
 	const axisStyle = { axis: { stroke: "#072f71" }, tickLabels: { fill: "#072f71", fontSize: 9 } };
 
