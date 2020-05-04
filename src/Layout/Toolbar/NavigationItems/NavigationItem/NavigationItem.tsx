@@ -10,7 +10,7 @@ type NavigationItemProps = {
 const NavigationItem: React.FC<NavigationItemProps> = (props: PropsWithChildren<NavigationItemProps>) => {
 	return (
 		<li className={classes.NavigationItem}>
-			<NavLink to={props.link} exact={props.exact} activeClassName={classes.active}>
+			<NavLink to={props.link} exact={props.exact} activeClassName={classes.Active}>
 				{props.children}
 			</NavLink>
 		</li>

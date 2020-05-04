@@ -1,0 +1,24 @@
+@import "../../../../styles/variables.scss";
+
+.NavigationItem {
+	width: auto;
+	margin: 0 0.4rem;
+
+	a {
+		padding: 1.2rem 1rem;
+		font-size: 1.6rem;
+		color: $whiteColor;
+		display: block;
+		transition: background-color 0.3s, color 0.3s;
+	}
+
+	a:hover {
+		background-color: $navyColorDark;
+	}
+
+	a:active,
+	a.Active {
+		background-color: $toxicGreenColor;
+		color: $navyColorLight;
+	}
+}

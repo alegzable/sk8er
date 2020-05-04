@@ -7,6 +7,7 @@
 	border-radius: 0.4rem;
 	box-shadow: $tileboxShadow;
 	cursor: pointer;
+	transition: background-color 0.3s;
 
 	&:hover {
 		box-shadow: $tileboxShadowActive;
@@ -20,6 +21,7 @@
 
 		.Title {
 			color: $navyColorLight;
+			transition: color 0.3s;
 		}
 	}
 
@@ -29,5 +31,6 @@
 		display: block;
 		font-weight: bold;
 		padding: 1.2rem;
+		text-transform: uppercase;
 	}
 }

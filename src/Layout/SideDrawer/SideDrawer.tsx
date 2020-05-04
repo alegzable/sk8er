@@ -1,30 +1,30 @@
 import React from "react";
 import classes from "./SideDrawer.module.scss";
 import Logo from "../Logo/Logo";
-import NavigationItems from "../NavigationItems/NavigationItems";
+import NavigationItems from "./NavigationItems/NavigationItems";
 import Backdrop from "../../UI/Backdrop/Backdrop";
 
 type SideDrawerProps = {
 	open: boolean;
-	closed: () => void;
+	onClose: () => void;
 };
 
-const SideDrawer: React.FC<SideDrawerProps> = (props: SideDrawerProps) => {
+const SideDrawer: React.FC<SideDrawerProps> = ({ open, onClose }) => {
 	let attachedClasses = [classes.SideDrawer, classes.Close];
 
-	if (props.open) {
+	if (open) {
 		attachedClasses = [classes.SideDrawer, classes.Open];
 	}
 
 	return (
 		<React.Fragment>
-			<Backdrop show={props.open} onClick={props.closed} />
+			<Backdrop show={open} onClick={onClose} />
 			<div className={attachedClasses.join(" ")}>
 				<div className={classes.Logo}>
 					<Logo />
 				</div>
 				<nav>
-					<NavigationItems />
+					<NavigationItems open={open} />
 				</nav>
 			</div>
 		</React.Fragment>

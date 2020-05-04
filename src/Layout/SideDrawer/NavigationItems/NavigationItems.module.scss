@@ -1,0 +1,60 @@
+@import "../../../styles/variables.scss";
+
+.NavigationItems {
+	font-weight: bold;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	transition: transform 0.3s;
+	max-height: 0;
+
+	&.Collapsed {
+		transform: scaleY(0);
+	}
+
+	.NavigationItem {
+		width: 100%;
+
+		.NavigationItemTitle {
+			padding: 1.2rem;
+			font-size: 1.6rem;
+			color: $navyColor;
+			display: flex;
+			justify-content: space-between;
+			cursor: pointer;
+
+			&.Active {
+				background-color: $toxicGreenColor;
+				color: $navyColorLight;
+			}
+		}
+
+		a {
+			padding: 1.2rem;
+			font-size: 1.6rem;
+			color: $navyColor;
+			display: block;
+			transition: background-color 0.3s, color 0.3s;
+		}
+
+		a:active,
+		a.Active {
+			background-color: $toxicGreenColor;
+			color: $navyColorLight;
+		}
+	}
+
+	.NavigationSubItem {
+		a {
+			font-size: 1.4rem;
+			padding: 1rem 1.2rem;
+			text-transform: uppercase;
+			// color: $navyColorLight;
+		}
+		a:active,
+		a.Active {
+			background-color: white;
+			color: $toxicGreenColor;
+		}
+	}
+}

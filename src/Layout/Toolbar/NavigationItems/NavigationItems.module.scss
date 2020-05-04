@@ -4,10 +4,5 @@
 	flex-direction: column;
 	align-items: center;
 	height: 100%;
-}
-
-@media (min-width: 60rem) {
-	.NavigationItems {
-		flex-direction: row;
-	}
+	flex-direction: row;
 }
