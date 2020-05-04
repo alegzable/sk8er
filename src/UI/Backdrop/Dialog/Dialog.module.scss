@@ -8,7 +8,9 @@
 
 .Dialog {
 	max-width: 90%;
-	max-height: 80%;
+	max-height: 90%;
+	overflow: auto;
+	margin: auto;
 	color: $navyColorDark;
 	padding: 1.6rem 1.4rem;
 
