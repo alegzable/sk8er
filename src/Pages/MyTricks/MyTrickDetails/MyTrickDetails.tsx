@@ -4,38 +4,37 @@ import { MyTrick } from "../../Tricks/Trick/TrickTypes";
 import Video from "../../Tricks/Trick/Video/Video";
 import Calendar from "./Calendar/Calendar";
 import CalendarDate from "./Calendar/CalendarDate";
-import { RouteComponentProps, Route, NavLink, useHistory } from "react-router-dom";
+import { Route, NavLink, useHistory } from "react-router-dom";
 import ScoreDialog from "./Score/ScoreDialog/ScoreDialog";
 import localStorageDataService from "../../../Services/LocalStorageDataService";
 import ScoreChart from "./Score/ScoreChart/ScoreChart";
 import PracticeDate from "./Score/DailyScore";
 
 type MyTrickDetailsProps = {
-	id: string;
+	initialTrick: MyTrick;
 };
 
-const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ match }) => {
-	const id = +match.params.id;
-	const [trick, setTrick] = useState<MyTrick | undefined>(undefined);
+const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ initialTrick }) => {
 	const history = useHistory();
+	const [myTrick, setMyTrick] = useState(initialTrick);
+	const redirectToTrickDetails = () => history.push(`/my-tricks/${myTrick.id}`);
 
 	useEffect(() => {
-		setTrick(localStorageDataService.getMyTrick(id));
-	}, [id, history.location.pathname]);
+		setMyTrick(initialTrick);
+	}, [initialTrick]);
 
 	const onCellClick = (date: CalendarDate, marked: boolean) => {
 		if (marked) {
-			localStorageDataService.removePracticeDay(id, date);
+			localStorageDataService.removePracticeDay(myTrick.id, date);
 		} else {
-			localStorageDataService.addPracticeDay(id, date);
+			localStorageDataService.addPracticeDay(myTrick.id, date);
 		}
 
-		setTrick(localStorageDataService.getMyTrick(id));
+		setMyTrick(localStorageDataService.getMyTrick(myTrick.id));
 	};
 
-	const redirectToTrickDetails = () => history.push(`/my-tricks/${id}`);
 	const onScoreSave = (date: CalendarDate, score: number) => {
-		localStorageDataService.updateTrickScore(id, new PracticeDate(date, score));
+		localStorageDataService.updateTrickScore(myTrick.id, new PracticeDate(date, score));
 
 		redirectToTrickDetails();
 	};
@@ -51,19 +50,19 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 		return Math.round(lvl);
 	};
 
-	const addScorePath = `/my-tricks/${id}/add-score`;
-	const details = trick ? (
+	const addScorePath = `/my-tricks/${myTrick.id}/add-score`;
+	const details = myTrick ? (
 		<>
-			<h1 className={classes.TrickName}>{trick.name}</h1>
+			<h1 className={classes.TrickName}>{myTrick.name}</h1>
 			<div className={classes.Score}>
-				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(trick)}</h3>
+				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(myTrick)}</h3>
 				<NavLink className={classes.AddScore} to={addScorePath}>
 					<span>Add Score</span>
 				</NavLink>
 				<Route path="/my-tricks/:id/add-score">
 					<ScoreDialog
 						isOpen={history.location.pathname === addScorePath}
-						trick={trick}
+						trick={myTrick}
 						onClose={redirectToTrickDetails}
 						onSave={onScoreSave}
 					/>
@@ -71,12 +70,12 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 			</div>
 			<div className={classes.Row}>
 				<div className={`${classes.Column} ${classes.ScoreChart}`}>
-					<ScoreChart trick={trick} />
+					<ScoreChart trick={myTrick} />
 				</div>
 				<div className={classes.Column}>
 					<div className={classes.Calendar}>
 						<Calendar
-							markedDates={trick.practiceDates.map((x) => x.date)}
+							markedDates={myTrick.practiceDates.map((x) => x.date)}
 							onCellClick={onCellClick}
 							title={"Have you practiced today?"}
 						/>
@@ -85,7 +84,7 @@ const MyTrickDetails: React.FC<RouteComponentProps<MyTrickDetailsProps>> = ({ ma
 			</div>
 			<div className={classes.Row}>
 				<div className={`${classes.Column} ${classes.Video}`}>
-					<Video url={trick.videoUrl} title={trick.name} />
+					<Video url={myTrick.videoUrl} title={myTrick.name} />
 				</div>
 			</div>
 		</>

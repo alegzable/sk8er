@@ -4,37 +4,54 @@ import { MyTrick } from "../Tricks/Trick/TrickTypes";
 import localStorageDataService from "../../Services/LocalStorageDataService";
 import MyTricksList from "./MyTricksList/MyTricksList";
 import MyTrickDetails from "./MyTrickDetails/MyTrickDetails";
-import { Link, Route, useHistory } from "react-router-dom";
+import { Link, useHistory, RouteComponentProps } from "react-router-dom";
 
-const MyTricks: React.FC = () => {
+type MyTrickProps = { id?: string };
+
+const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 	const [myTricks, setMyTricks] = useState<MyTrick[]>([]);
+	const [selectedTrick, setSelectedTrick] = useState<MyTrick | undefined>();
 	const history = useHistory();
 
 	useEffect(() => {
 		setMyTricks(localStorageDataService.getMyTricks());
-	}, []);
+	}, [history.location.pathname]);
 
 	useEffect(() => {
-		const redirectToFirstTrick = (pathname: string, myTricks: MyTrick[]) => {
-			const paramId = pathname.split("/")[2];
+		if (myTricks.length === 0) {
+			return;
+		}
+
+		const redirectToFirstTrick = (myTricks: MyTrick[]) => {
 			const firstTrickId = myTricks[0]?.id;
 
-			if (paramId === undefined && firstTrickId !== undefined) {
+			if (firstTrickId !== undefined) {
 				history.push(`/my-tricks/${firstTrickId}`);
 			}
 		};
 
-		redirectToFirstTrick(history.location.pathname, myTricks);
-	}, [history, history.location.pathname, myTricks]);
+		const id = match.params.id !== undefined ? +match.params.id : undefined;
+
+		if (id === undefined) {
+			redirectToFirstTrick(myTricks);
+		} else {
+			const selectedTrick = myTricks.find((x) => x.id === id);
+			if (selectedTrick === undefined) {
+				history.push("/404");
+			} else {
+				setSelectedTrick(selectedTrick);
+			}
+		}
+	}, [myTricks, match.params.id, history]);
 
 	const content =
-		myTricks.length > 0 ? (
+		myTricks.length > 0 && selectedTrick ? (
 			<>
 				<div className={`${classes.List} ${classes.DesktopOnly}`}>
 					<MyTricksList tricks={myTricks} />
 				</div>
 				<div className={classes.Details}>
-					<Route path="/my-tricks/:id" component={MyTrickDetails}></Route>
+					<MyTrickDetails initialTrick={selectedTrick}></MyTrickDetails>
 				</div>
 			</>
 		) : (
