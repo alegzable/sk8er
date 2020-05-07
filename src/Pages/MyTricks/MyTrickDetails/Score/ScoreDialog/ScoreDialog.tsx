@@ -70,6 +70,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trick, onClose, onSav
 									onChange={onDateChanged}
 									inputName={nameof<ScoreFormFields>("scoreDate")}
 									inputId={nameof<ScoreFormFields>("scoreDate")}
+									max={CalendarDate.today()}
 								/>
 								<ErrorMessage value={formik.errors.scoreDate}></ErrorMessage>
 							</div>

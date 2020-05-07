@@ -13,9 +13,10 @@ type Props = {
 	onChange: (value?: CalendarDate) => void;
 	inputClassName?: string;
 	inputId?: string;
+	max?: CalendarDate;
 };
 
-const DatePicker: React.FC<Props> = ({ value, inputName, onChange, inputClassName, inputId }) => {
+const DatePicker: React.FC<Props> = ({ value, inputName, onChange, inputClassName, inputId, max }) => {
 	const handleOnChange = (selectedDate: Date): void => {
 		if (selectedDate === null) {
 			onChange(undefined);
@@ -36,6 +37,8 @@ const DatePicker: React.FC<Props> = ({ value, inputName, onChange, inputClassNam
 		name: inputName,
 	};
 
+	const maxDate = max?.getDate() ?? dateBoundaries.max;
+
 	return (
 		<DateInput
 			onChange={handleOnChange}
@@ -46,7 +49,7 @@ const DatePicker: React.FC<Props> = ({ value, inputName, onChange, inputClassNam
 			parseDate={parseDate}
 			placeholder={dateFormats.date}
 			minDate={dateBoundaries.min}
-			maxDate={dateBoundaries.max}
+			maxDate={maxDate}
 			value={value?.getDate()}
 			popoverProps={popoverProps}
 			className={classes.DatePicker}
