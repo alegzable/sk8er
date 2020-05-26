@@ -23,18 +23,18 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ initialTrick }) => {
 		setMyTrick(initialTrick);
 	}, [initialTrick]);
 
-	const onCellClick = (date: CalendarDate, marked: boolean) => {
+	const onCellClick = async (date: CalendarDate, marked: boolean) => {
 		if (marked) {
-			localStorageDataService.removePracticeDay(myTrick.id, date);
+			localStorageDataService.removePracticeDayAsync(myTrick.id, date);
 		} else {
-			localStorageDataService.addPracticeDay(myTrick.id, date);
+			localStorageDataService.addPracticeDayAsync(myTrick.id, date);
 		}
 
-		setMyTrick(localStorageDataService.getMyTrick(myTrick.id));
+		setMyTrick(await localStorageDataService.getMyTrickAsync(myTrick.id));
 	};
 
 	const onScoreSave = (date: CalendarDate, score: number) => {
-		localStorageDataService.updateTrickScore(myTrick.id, new PracticeDate(date, score));
+		localStorageDataService.updateTrickScoreAsync(myTrick.id, new PracticeDate(date, score));
 
 		redirectToTrickDetails();
 	};

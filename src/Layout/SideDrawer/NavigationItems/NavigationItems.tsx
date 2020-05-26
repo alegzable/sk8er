@@ -17,8 +17,14 @@ const NavigationItems: React.FC<NavigationItemsProps> = ({ open }) => {
 	const [myTricksExpanded, setMyTricksExpanded] = useState(true);
 
 	useEffect(() => {
+		const getMyTricks = async () => {
+			const myTricks = await localStorageDataService.getMyTricksAsync();
+
+			setMyTricks(myTricks);
+		};
+
 		if (open) {
-			setMyTricks(localStorageDataService.getMyTricks());
+			getMyTricks();
 		}
 	}, [open]);
 

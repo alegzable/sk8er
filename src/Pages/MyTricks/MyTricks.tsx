@@ -14,7 +14,13 @@ const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 	const history = useHistory();
 
 	useEffect(() => {
-		setMyTricks(localStorageDataService.getMyTricks());
+		const getMyTricks = async () => {
+			const myTricks = await localStorageDataService.getMyTricksAsync();
+
+			setMyTricks(myTricks);
+		};
+
+		getMyTricks();
 	}, [history.location.pathname]);
 
 	useEffect(() => {

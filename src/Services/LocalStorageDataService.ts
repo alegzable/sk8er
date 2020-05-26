@@ -2,18 +2,22 @@ import { UserLibraryTrick, LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/T
 import CalendarDate from "../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
 import PracticeDate from "../Pages/MyTricks/MyTrickDetails/Score/DailyScore";
 
+const delay = () => {
+	return new Promise((resolve) => setTimeout(resolve, 200));
+};
+
 export const localStorageKeys = {
 	tricks: "TRICKS",
 	myTricks: "MY_TRICKS",
 } as const;
 
 export class LocalStorageDataService {
-	public updateTrickScore = (id: number, score: PracticeDate) => {
+	public updateTrickScoreAsync = async (id: number, score: PracticeDate) => {
 		if (score.date === undefined || score.score === undefined) {
 			throw new Error("Invalid date or value");
 		}
 
-		const myTricks = this.getMyTricks();
+		const myTricks = await this.getMyTricksAsync();
 		const myTrick = myTricks.find((x) => x.id === id);
 
 		if (myTrick === undefined) {
@@ -32,7 +36,9 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
-	public getMyTricks = (): MyTrick[] => {
+	public getMyTricksAsync = async (): Promise<MyTrick[]> => {
+		await delay();
+
 		const myTricksJSON = this._getFromStorage<MyTrickJSON[]>(localStorageKeys.myTricks) || [];
 
 		return myTricksJSON.map((x) => {
@@ -52,12 +58,12 @@ export class LocalStorageDataService {
 		});
 	};
 
-	public getMyTrick = (id?: number): MyTrick => {
+	public getMyTrickAsync = async (id?: number): Promise<MyTrick> => {
 		if (!id) {
 			throw new Error("Trick not found");
 		}
 
-		const myTricks = this.getMyTricks();
+		const myTricks = await this.getMyTricksAsync();
 		const myTrick = myTricks.find((x) => x.id === id);
 
 		if (myTrick === undefined) {
@@ -67,8 +73,8 @@ export class LocalStorageDataService {
 		return myTrick;
 	};
 
-	public addPracticeDay = (id: number, date: CalendarDate) => {
-		const myTricks = this.getMyTricks();
+	public addPracticeDayAsync = async (id: number, date: CalendarDate) => {
+		const myTricks = await this.getMyTricksAsync();
 		const trick = myTricks.find((x) => x.id === id);
 
 		if (!trick) {
@@ -86,8 +92,8 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
-	public removePracticeDay = (id: number, date: CalendarDate) => {
-		const myTricks = this.getMyTricks();
+	public removePracticeDayAsync = async (id: number, date: CalendarDate) => {
+		const myTricks = await this.getMyTricksAsync();
 		const trick = myTricks.find((x) => x.id === id);
 
 		if (!trick) {
@@ -105,7 +111,9 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
-	public getUserLibraryTricks = (): UserLibraryTrick[] => {
+	public getUserLibraryTricksAsync = async (): Promise<UserLibraryTrick[]> => {
+		await delay();
+
 		const libraryTricks = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks);
 		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks);
 
@@ -127,7 +135,9 @@ export class LocalStorageDataService {
 		return userLibraryTricks;
 	};
 
-	public addToMyTricks = (id: number) => {
+	public addToMyTricksAsync = async (id: number) => {
+		await delay();
+
 		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
 		const alreadyAdded = myTricks.findIndex((x) => x.id === id) !== -1;
 
@@ -148,7 +158,9 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
-	public removeFromMyTricks = (id: number) => {
+	public removeFromMyTricksAsync = async (id: number) => {
+		await delay();
+
 		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
 		const trickToRemoveIndex = myTricks.findIndex((x) => x.id === id);
 
@@ -167,24 +179,6 @@ export class LocalStorageDataService {
 			this._addToStorage(localStorageKeys.tricks, tricks);
 		}
 	};
-
-	// private _getTricksScores = (): MyTrickScores[] => {
-	// 	const myTrickScoresJSON = this._getFromStorage<MyTrickScoresJSON[]>(localStorageKeys.scores) || [];
-	// 	return myTrickScoresJSON.map((x) => {
-	// 		return {
-	// 			id: x.id,
-	// 			scores: x.scores
-	// 				.map(
-	// 					(score) =>
-	// 						new PracticeDate(
-	// 							new CalendarDate(score.date.year, score.date.month, score.date.day),
-	// 							score.value
-	// 						)
-	// 				)
-	// 				.sort((score1: PracticeDate, score2: PracticeDate) => score1.date.compare(score2.date)),
-	// 		};
-	// 	});
-	// };
 
 	private _getFromStorage<T>(key: string): T | null {
 		const json = localStorage.getItem(key);

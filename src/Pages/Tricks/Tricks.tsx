@@ -8,19 +8,25 @@ const Tricks: React.FC = () => {
 	const [tricks, setTricks] = useState<UserLibraryTrick[]>([]);
 
 	useEffect(() => {
-		setTricks(localStorageDataService.getUserLibraryTricks());
+		const getUserLibraryTricks = async () => {
+			const libraryTricks = await localStorageDataService.getUserLibraryTricksAsync();
+
+			setTricks(libraryTricks);
+		};
+
+		getUserLibraryTricks();
 	}, []);
 
-	const addToMyTricks = (id: number) => {
-		localStorageDataService.addToMyTricks(id);
+	const addToMyTricks = async (id: number) => {
+		await localStorageDataService.addToMyTricksAsync(id);
 
-		setTricks(localStorageDataService.getUserLibraryTricks());
+		setTricks(await localStorageDataService.getUserLibraryTricksAsync());
 	};
 
-	const removeFromMyTricks = (id: number) => {
-		localStorageDataService.removeFromMyTricks(id);
+	const removeFromMyTricks = async (id: number) => {
+		await localStorageDataService.removeFromMyTricksAsync(id);
 
-		setTricks(localStorageDataService.getUserLibraryTricks());
+		setTricks(await localStorageDataService.getUserLibraryTricksAsync());
 	};
 
 	const trickList = tricks.map((trick) => (
