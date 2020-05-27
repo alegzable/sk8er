@@ -8,10 +8,19 @@ import "./index.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "what-input";
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
+import { tricksReducer } from "./Pages/Tricks/tricksReducer";
+
+const rootReducer = combineReducers({ tricksReducer });
+
+const store = createStore(rootReducer);
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<Provider store={store}>
+			<App />
+		</Provider>
 	</React.StrictMode>,
 	document.getElementById("root")
 );
