@@ -11,10 +11,11 @@ import "what-input";
 import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 import { tricksReducer } from "./Pages/Tricks/tricksReducer";
+import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 
 const rootReducer = combineReducers({ tricksReducer });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
 	<React.StrictMode>
