@@ -1,4 +1,4 @@
-import { UserLibraryTrick, LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/Tricks/Trick/TrickTypes";
+import { LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/Tricks/Trick/TrickTypes";
 import CalendarDate from "../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
 import PracticeDate from "../Pages/MyTricks/MyTrickDetails/Score/DailyScore";
 
@@ -111,28 +111,10 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};
 
-	public getUserLibraryTricksAsync = async (): Promise<UserLibraryTrick[]> => {
+	public getLibraryTricksAsync = async (): Promise<LibraryTrick[]> => {
 		await delay();
 
-		const libraryTricks = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks);
-		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks);
-
-		if (libraryTricks === null) {
-			return [];
-		}
-
-		const myTrickIds = myTricks?.map((x) => x.id);
-
-		const userLibraryTricks = libraryTricks.map((libraryTrick) => {
-			const addedToMyTricks = myTrickIds?.includes(libraryTrick.id) ?? false;
-
-			return {
-				...libraryTrick,
-				addedToMyTricks,
-			};
-		});
-
-		return userLibraryTricks;
+		return this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks) || [];
 	};
 
 	public addToMyTricksAsync = async (id: number) => {
@@ -151,9 +133,9 @@ export class LocalStorageDataService {
 			throw new Error("Trick does not exist");
 		}
 
-		(trickToAdd as MyTrick).practiceDates = [];
+		const myTrick = { ...trickToAdd, practiceDates: [] };
 
-		myTricks.push(trickToAdd as MyTrick);
+		myTricks.push(myTrick);
 
 		this._addToStorage(localStorageKeys.myTricks, myTricks);
 	};

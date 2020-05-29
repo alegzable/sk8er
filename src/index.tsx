@@ -9,13 +9,12 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "what-input";
 import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
-import { tricksReducer } from "./Pages/Tricks/tricksReducer";
+import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
+import thunk from "redux-thunk";
+import rootReducer from "./rootReducer";
 
-const rootReducer = combineReducers({ tricksReducer });
-
-const store = createStore(rootReducer, composeWithDevTools());
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 ReactDOM.render(
 	<React.StrictMode>
