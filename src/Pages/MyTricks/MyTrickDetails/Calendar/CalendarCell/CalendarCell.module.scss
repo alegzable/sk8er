@@ -21,7 +21,7 @@
 		box-shadow: inset 0 0 0 0.2rem lighten($toxicGreenColor, 30%);
 	}
 
-	&.Weekend:not(.Marked) {
+	&.Weekend:not(.Marked):not(:hover) {
 		background-color: $greyColorLight;
 	}
 }
