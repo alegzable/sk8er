@@ -1,10 +1,10 @@
 import { LibraryTrick } from "./Trick/TrickTypes";
 
-export const TRICKS_ADD = "TRICKS_ADD" as const;
+export const TRICKS_INITIATE = "TRICKS_INITIATE" as const;
 
-export type TricksAction = { type: typeof TRICKS_ADD; payload: LibraryTrick[] };
+export type TricksAction = { type: typeof TRICKS_INITIATE; payload: LibraryTrick[] };
 
-export const addTricks = (tricks: LibraryTrick[]) => ({
-	type: TRICKS_ADD,
+export const initiateTricks = (tricks: LibraryTrick[]) => ({
+	type: TRICKS_INITIATE,
 	payload: tricks,
 });

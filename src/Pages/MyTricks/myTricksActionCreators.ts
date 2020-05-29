@@ -1,12 +1,12 @@
 import { MyTrick } from "../Tricks/Trick/TrickTypes";
 
 export const MY_TRICK_ADD = "MY_TRICK_ADD" as const;
-export const MY_TRICKS_ADD = "MY_TRICKS_ADD" as const;
+export const MY_TRICKS_INITIATE = "MY_TRICKS_INITIATE" as const;
 export const MY_TRICK_REMOVE = "MY_TRICK_REMOVE" as const;
 
 export type MyTricksAction =
 	| { type: typeof MY_TRICK_ADD; payload: MyTrick }
-	| { type: typeof MY_TRICKS_ADD; payload: MyTrick[] }
+	| { type: typeof MY_TRICKS_INITIATE; payload: MyTrick[] }
 	| { type: typeof MY_TRICK_REMOVE; payload: number };
 
 export const addMyTrick = (trick: MyTrick): MyTricksAction => ({
@@ -19,7 +19,7 @@ export const removeMyTrick = (id: number): MyTricksAction => ({
 	payload: id,
 });
 
-export const addMyTricks = (tricks: MyTrick[]) => ({
-	type: MY_TRICKS_ADD,
+export const initiateMyTricks = (tricks: MyTrick[]) => ({
+	type: MY_TRICKS_INITIATE,
 	payload: tricks,
 });

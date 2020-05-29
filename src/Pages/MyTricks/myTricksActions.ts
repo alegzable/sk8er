@@ -1,6 +1,6 @@
 import localStorageDataService from "../../Services/LocalStorageDataService";
 import { Dispatch } from "react";
-import { MyTricksAction, addMyTrick, addMyTricks, removeMyTrick } from "./myTricksActionCreators";
+import { MyTricksAction, addMyTrick, initiateMyTricks, removeMyTrick } from "./myTricksActionCreators";
 
 export const addMyTrickAsync = (id: number) => async (dispatch: Dispatch<MyTricksAction>) => {
 	await localStorageDataService.addToMyTricksAsync(id);
@@ -12,7 +12,7 @@ export const addMyTrickAsync = (id: number) => async (dispatch: Dispatch<MyTrick
 export const getMyTricksAsync = () => async (dispatch: Dispatch<MyTricksAction>) => {
 	const myTricks = await localStorageDataService.getMyTricksAsync();
 
-	dispatch(addMyTricks(myTricks));
+	dispatch(initiateMyTricks(myTricks));
 };
 
 export const removeTrickAsync = (id: number) => async (dispatch: Dispatch<MyTricksAction>) => {
