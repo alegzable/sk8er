@@ -1,9 +1,9 @@
 import { LibraryTrick } from "./Trick/TrickTypes";
-import { TricksAction } from "./tricksActionCreators";
+import { TricksAction, TRICKS_INITIATE_SUCCESS } from "./tricksActionCreators";
 
-export const tricksReducer = (state: LibraryTrick[] = [], action: TricksAction) => {
+export const tricksReducer = (state: LibraryTrick[] = [], action: TricksAction): LibraryTrick[] => {
 	switch (action.type) {
-		case "TRICKS_INITIATE":
+		case TRICKS_INITIATE_SUCCESS:
 			return action.payload;
 	}
 
