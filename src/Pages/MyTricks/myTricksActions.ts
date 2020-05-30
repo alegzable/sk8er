@@ -1,22 +1,47 @@
 import localStorageDataService from "../../Services/LocalStorageDataService";
 import { Dispatch } from "react";
-import { MyTricksAction, addMyTrick, initiateMyTricks, removeMyTrick } from "./myTricksActionCreators";
+import {
+	MY_TRICKS_ADD_SUCCESS,
+	MY_TRICKS_REMOVE_SUCCESS,
+	MY_TRICKS_INITIATE_SUCCESS,
+	MY_TRICKS_INITIATE_REQUEST,
+	MY_TRICKS_ADD_REQUEST,
+	MY_TRICKS_REMOVE_REQUEST,
+	MyTricksInitiateAction,
+	MyTricksAddAction,
+	MyTricksRemoveAction,
+} from "./myTricksActionTypes";
 
-export const addMyTrickAsync = (id: number) => async (dispatch: Dispatch<MyTricksAction>) => {
-	await localStorageDataService.addToMyTricksAsync(id);
-	const myTrick = await localStorageDataService.getMyTrickAsync(id);
+export const getMyTricksAsync = () => async (dispatch: Dispatch<MyTricksInitiateAction>) => {
+	dispatch({ type: MY_TRICKS_INITIATE_REQUEST });
 
-	dispatch(addMyTrick(myTrick));
-};
-
-export const getMyTricksAsync = () => async (dispatch: Dispatch<MyTricksAction>) => {
 	const myTricks = await localStorageDataService.getMyTricksAsync();
 
-	dispatch(initiateMyTricks(myTricks));
+	dispatch({
+		type: MY_TRICKS_INITIATE_SUCCESS,
+		payload: myTricks,
+	});
 };
 
-export const removeTrickAsync = (id: number) => async (dispatch: Dispatch<MyTricksAction>) => {
-	await localStorageDataService.removeFromMyTricksAsync(id);
+export const addMyTrickAsync = (libraryTrickId: string) => async (dispatch: Dispatch<MyTricksAddAction>) => {
+	dispatch({ type: MY_TRICKS_ADD_REQUEST });
 
-	dispatch(removeMyTrick(id));
+	await localStorageDataService.addToMyTricksAsync(libraryTrickId);
+	const myTrick = await localStorageDataService.getMyTrickAsync(libraryTrickId);
+
+	dispatch({
+		type: MY_TRICKS_ADD_SUCCESS,
+		payload: myTrick,
+	});
+};
+
+export const removeTrickAsync = (libraryTrickId: string) => async (dispatch: Dispatch<MyTricksRemoveAction>) => {
+	dispatch({ type: MY_TRICKS_REMOVE_REQUEST });
+
+	await localStorageDataService.removeFromMyTricksAsync(libraryTrickId);
+
+	dispatch({
+		type: MY_TRICKS_REMOVE_SUCCESS,
+		payload: libraryTrickId,
+	});
 };

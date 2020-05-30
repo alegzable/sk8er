@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./MyTricksList.module.scss";
-import { MyTrick } from "../../Tricks/Trick/TrickTypes";
 import MyTricksListItem from "./MyTricksListItem/MyTricksListItem";
+import { MyTrick } from "../myTricksSelector";
 
 type MyTricksListProps = {
 	tricks: MyTrick[];
@@ -9,7 +9,7 @@ type MyTricksListProps = {
 
 const MyTricksList: React.FC<MyTricksListProps> = (props: MyTricksListProps) => {
 	const tricks = props.tricks.map((x) => (
-		<li key={x.id}>
+		<li key={x.userTrickId}>
 			<MyTricksListItem trick={x} />
 		</li>
 	));

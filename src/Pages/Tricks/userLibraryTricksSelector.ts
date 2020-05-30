@@ -1,15 +1,19 @@
 import { RootState, State } from "../../rootReducer";
 import { LibraryTrick } from "./Trick/TrickTypes";
+import { Selector } from "react-redux";
 
 export type UserLibraryTrick = LibraryTrick & { addedToMyTricks: boolean };
 
-const userLibraryTricksSelector = ({ tricks, myTricks }: RootState): State<UserLibraryTrick[]> => {
-	const libraryTricks = tricks.data;
-
-	const myTrickIds = myTricks?.map((x) => x.id);
+const userLibraryTricksSelector: Selector<RootState, State<UserLibraryTrick[]>> = ({
+	tricks: tricksState,
+	userTricks: userTricksState,
+}) => {
+	const libraryTricks = tricksState.data;
+	const userTricks = userTricksState.data;
+	const libraryTickIdsInMyTricks = userTricks.map((x) => x.libraryTrickId);
 
 	const userLibraryTricks = libraryTricks.map((libraryTrick) => {
-		const addedToMyTricks = myTrickIds?.includes(libraryTrick.id) ?? false;
+		const addedToMyTricks = libraryTickIdsInMyTricks?.includes(libraryTrick.id) ?? false;
 
 		return {
 			...libraryTrick,
@@ -18,7 +22,7 @@ const userLibraryTricksSelector = ({ tricks, myTricks }: RootState): State<UserL
 	});
 
 	return {
-		loading: tricks.loading,
+		loading: tricksState.loading,
 		data: userLibraryTricks,
 		error: undefined,
 	};

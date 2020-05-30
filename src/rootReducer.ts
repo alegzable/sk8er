@@ -1,17 +1,19 @@
-import { LibraryTrick, MyTrick } from "./Pages/Tricks/Trick/TrickTypes";
 import { combineReducers } from "redux";
 import { tricksReducer } from "./Pages/Tricks/tricksReducer";
 import { myTricksReducer } from "./Pages/MyTricks/myTricksReducer";
+import { practiceDaysReducer } from "./Pages/MyTricks/MyTrickDetails/practiceDaysReducer";
 
+const rootReducer = combineReducers({
+	tricks: tricksReducer,
+	userTricks: myTricksReducer,
+	practiceDays: practiceDaysReducer,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
 export type State<T> = {
 	loading: boolean;
 	data: T;
 	error?: string;
 };
 
-export type RootState = {
-	tricks: State<LibraryTrick[]>;
-	myTricks: MyTrick[];
-};
-
-export default combineReducers({ tricks: tricksReducer, myTricks: myTricksReducer });
+export default rootReducer;

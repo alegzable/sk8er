@@ -4,7 +4,7 @@ import {
 	TRICKS_INITIATE_SUCCESS,
 	TRICKS_INITIATE_REQUEST,
 	TRICKS_INITIATE_ERROR,
-} from "./tricksActionCreators";
+} from "./tricksActionTypes";
 import { State } from "../../rootReducer";
 
 const initialState: State<LibraryTrick[]> = {
@@ -26,7 +26,6 @@ export const tricksReducer = (
 			return {
 				loading: false,
 				data: action.payload,
-				error: undefined,
 			};
 		case TRICKS_INITIATE_ERROR:
 			return {

@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
 import classes from "./MyTricks.module.scss";
-import { MyTrick } from "../Tricks/Trick/TrickTypes";
-import localStorageDataService from "../../Services/LocalStorageDataService";
 import MyTricksList from "./MyTricksList/MyTricksList";
 import MyTrickDetails from "./MyTrickDetails/MyTrickDetails";
 import { Link, useHistory, RouteComponentProps } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getMyTricksAsync } from "./myTricksActions";
+import myTricksSelector, { MyTrick } from "./myTricksSelector";
+import { getTricksAsync } from "../Tricks/tricksActions";
 
 type MyTrickProps = { id?: string };
 
 const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
-	const [myTricks, setMyTricks] = useState<MyTrick[]>([]);
-	const [selectedTrick, setSelectedTrick] = useState<MyTrick | undefined>();
+	const dispatch = useDispatch();
+	const { data: myTricks } = useSelector(myTricksSelector);
+	const [selectedUserTrick, setSelectedTrick] = useState<MyTrick | undefined>();
 	const history = useHistory();
 
 	useEffect(() => {
-		const getMyTricks = async () => {
-			const myTricks = await localStorageDataService.getMyTricksAsync();
-
-			setMyTricks(myTricks);
-		};
-
-		getMyTricks();
-	}, [history.location.pathname]);
+		dispatch(getTricksAsync());
+		dispatch(getMyTricksAsync());
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (myTricks.length === 0) {
@@ -29,19 +27,19 @@ const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 		}
 
 		const redirectToFirstTrick = (myTricks: MyTrick[]) => {
-			const firstTrickId = myTricks[0]?.id;
+			const firstTrickId = myTricks[0]?.userTrickId;
 
 			if (firstTrickId !== undefined) {
 				history.push(`/my-tricks/${firstTrickId}`);
 			}
 		};
 
-		const id = match.params.id !== undefined ? +match.params.id : undefined;
+		const id = match.params.id;
 
 		if (id === undefined) {
 			redirectToFirstTrick(myTricks);
 		} else {
-			const selectedTrick = myTricks.find((x) => x.id === id);
+			const selectedTrick = myTricks.find((x) => x.userTrickId === id);
 			if (selectedTrick === undefined) {
 				history.push("/404");
 			} else {
@@ -51,13 +49,13 @@ const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 	}, [myTricks, match.params.id, history]);
 
 	const content =
-		myTricks.length > 0 && selectedTrick ? (
+		myTricks.length > 0 && selectedUserTrick ? (
 			<>
 				<div className={`${classes.List} ${classes.DesktopOnly}`}>
 					<MyTricksList tricks={myTricks} />
 				</div>
 				<div className={classes.Details}>
-					<MyTrickDetails initialTrick={selectedTrick}></MyTrickDetails>
+					<MyTrickDetails myTrick={selectedUserTrick}></MyTrickDetails>
 				</div>
 			</>
 		) : (

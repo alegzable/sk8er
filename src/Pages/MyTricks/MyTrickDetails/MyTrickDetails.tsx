@@ -1,46 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import classes from "./MyTrickDetails.module.scss";
-import { MyTrick } from "../../Tricks/Trick/TrickTypes";
+import { UserTrickPracticeDay } from "../../Tricks/Trick/TrickTypes";
 import Video from "../../Tricks/Trick/Video/Video";
 import Calendar from "./Calendar/Calendar";
 import CalendarDate from "./Calendar/CalendarDate";
 import { Route, NavLink, useHistory } from "react-router-dom";
 import ScoreDialog from "./Score/ScoreDialog/ScoreDialog";
-import localStorageDataService from "../../../Services/LocalStorageDataService";
 import ScoreChart from "./Score/ScoreChart/ScoreChart";
-import PracticeDate from "./Score/DailyScore";
+import { useDispatch, useSelector } from "react-redux";
+import { MyTrick } from "../myTricksSelector";
+import {
+	getUserPracticeDaysAsync,
+	removeUserPracticeDayAsync,
+	addUserPracticeDayAsync,
+	updateUserPracticeDayAsync,
+} from "./practiceDaysActions";
+import { RootState, State } from "../../../rootReducer";
 
 type MyTrickDetailsProps = {
-	initialTrick: MyTrick;
+	myTrick: MyTrick;
 };
 
-const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ initialTrick }) => {
+const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ myTrick }) => {
+	const { userTrickId, name: trickName, videoUrl } = myTrick;
 	const history = useHistory();
-	const [myTrick, setMyTrick] = useState(initialTrick);
-	const redirectToTrickDetails = () => history.push(`/my-tricks/${myTrick.id}`);
+	const dispatch = useDispatch();
+	const { data: practiceDays } = useSelector<RootState, State<UserTrickPracticeDay[]>>((state) => state.practiceDays);
+	const redirectToTrickDetails = () => history.push(`/my-tricks/${userTrickId}`);
 
 	useEffect(() => {
-		setMyTrick(initialTrick);
-	}, [initialTrick]);
+		dispatch(getUserPracticeDaysAsync(userTrickId));
+	}, [dispatch, userTrickId]);
 
 	const onCellClick = async (date: CalendarDate, marked: boolean) => {
 		if (marked) {
-			localStorageDataService.removePracticeDayAsync(myTrick.id, date);
-		} else {
-			localStorageDataService.addPracticeDayAsync(myTrick.id, date);
-		}
+			const practiceDayId = practiceDays.find((x) => x.date.equals(date))?.id;
 
-		setMyTrick(await localStorageDataService.getMyTrickAsync(myTrick.id));
+			if (practiceDayId === undefined) {
+				return;
+			}
+
+			dispatch(removeUserPracticeDayAsync(practiceDayId));
+		} else {
+			dispatch(addUserPracticeDayAsync(userTrickId, date));
+		}
 	};
 
 	const onScoreSave = (date: CalendarDate, score: number) => {
-		localStorageDataService.updateTrickScoreAsync(myTrick.id, new PracticeDate(date, score));
+		dispatch(updateUserPracticeDayAsync(userTrickId, date, score));
 
 		redirectToTrickDetails();
 	};
 
-	const calculateTrickLevel = (trick: MyTrick): number => {
-		const scoredPracticeDates = trick.practiceDates.filter((x) => x.score !== undefined);
+	const calculateTrickLevel = (): number => {
+		const scoredPracticeDates = practiceDays.filter((x) => x.score !== undefined);
 		const scoresToCalculateLvl = 10;
 		const lvl =
 			scoredPracticeDates
@@ -50,19 +63,27 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ initialTrick }) => {
 		return Math.round(lvl);
 	};
 
-	const addScorePath = `/my-tricks/${myTrick.id}/add-score`;
+	const scoredPracticeDays = practiceDays
+		.filter((x) => x.score !== undefined)
+		.sort((a, b) => a.date.compare(b.date))
+		.map((x) => {
+			return { date: x.date.getDate().toString(), score: x.score as number };
+		});
+
+	const addScorePath = `/my-tricks/${userTrickId}/add-score`;
 	const details = myTrick ? (
 		<>
-			<h1 className={classes.TrickName}>{myTrick.name}</h1>
+			<h1 className={classes.TrickName}>{trickName}</h1>
 			<div className={classes.Score}>
-				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel(myTrick)}</h3>
+				<h3 className={classes.CurrentLevel}>Your lvl: {calculateTrickLevel()}</h3>
 				<NavLink className={classes.AddScore} to={addScorePath}>
 					<span>Add Score</span>
 				</NavLink>
 				<Route path="/my-tricks/:id/add-score">
 					<ScoreDialog
 						isOpen={history.location.pathname === addScorePath}
-						trick={myTrick}
+						trickName={trickName}
+						practiceDays={practiceDays}
 						onClose={redirectToTrickDetails}
 						onSave={onScoreSave}
 					/>
@@ -70,12 +91,12 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ initialTrick }) => {
 			</div>
 			<div className={classes.Row}>
 				<div className={`${classes.Column} ${classes.ScoreChart}`}>
-					<ScoreChart trick={myTrick} />
+					<ScoreChart scores={scoredPracticeDays} />
 				</div>
 				<div className={classes.Column}>
 					<div className={classes.Calendar}>
 						<Calendar
-							markedDates={myTrick.practiceDates.map((x) => x.date)}
+							markedDates={practiceDays.map((x) => x.date)}
 							onCellClick={onCellClick}
 							title={"Have you practiced today?"}
 						/>
@@ -84,7 +105,7 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ initialTrick }) => {
 			</div>
 			<div className={classes.Row}>
 				<div className={`${classes.Column} ${classes.Video}`}>
-					<Video url={myTrick.videoUrl} title={myTrick.name} />
+					<Video url={videoUrl} title={trickName} />
 				</div>
 			</div>
 		</>

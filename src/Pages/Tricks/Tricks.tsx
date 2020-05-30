@@ -15,11 +15,11 @@ const Tricks: React.FC = () => {
 		dispatch(getMyTricksAsync());
 	}, [dispatch]);
 
-	const addToMyTricks = async (id: number) => {
+	const addToMyTricks = async (id: string) => {
 		dispatch(addMyTrickAsync(id));
 	};
 
-	const removeFromMyTricks = async (id: number) => {
+	const removeFromMyTricks = async (id: string) => {
 		dispatch(removeTrickAsync(id));
 	};
 

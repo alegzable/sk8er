@@ -4,12 +4,12 @@ import Video from "./Video/Video";
 import AddRemoveButton from "./AddRemoveButton/AddRemoveButton";
 
 type TrickProps = {
-	id: number;
+	id: string;
 	name: string;
 	videoUrl: string;
 	added: boolean;
-	addToMyTricks: (id: number) => void;
-	removeFromMyTricks: (id: number) => void;
+	addToMyTricks: (id: string) => void;
+	removeFromMyTricks: (id: string) => void;
 };
 
 const Trick: React.FC<TrickProps> = (props: TrickProps) => {
