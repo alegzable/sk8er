@@ -4,11 +4,11 @@ import Trick from "./Trick/Trick";
 import { useDispatch, useSelector } from "react-redux";
 import { getTricksAsync } from "./tricksActions";
 import { addMyTrickAsync, removeTrickAsync, getMyTricksAsync } from "../MyTricks/myTricksActions";
-import tricksSelector, { UserLibraryTrick } from "./userLibraryTricksSelector";
+import tricksSelector from "./userLibraryTricksSelector";
 
 const Tricks: React.FC = () => {
 	const dispatch = useDispatch();
-	const tricks: UserLibraryTrick[] = useSelector(tricksSelector);
+	const { data: tricks } = useSelector(tricksSelector);
 
 	useEffect(() => {
 		dispatch(getTricksAsync());
@@ -34,6 +34,7 @@ const Tricks: React.FC = () => {
 			removeFromMyTricks={removeFromMyTricks}
 		/>
 	));
+
 	return <div className={classes.Tricks}>{trickList}</div>;
 };
 

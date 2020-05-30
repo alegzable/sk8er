@@ -3,8 +3,14 @@ import { combineReducers } from "redux";
 import { tricksReducer } from "./Pages/Tricks/tricksReducer";
 import { myTricksReducer } from "./Pages/MyTricks/myTricksReducer";
 
+export type State<T> = {
+	loading: boolean;
+	data: T;
+	error?: string;
+};
+
 export type RootState = {
-	tricks: LibraryTrick[];
+	tricks: State<LibraryTrick[]>;
 	myTricks: MyTrick[];
 };
 

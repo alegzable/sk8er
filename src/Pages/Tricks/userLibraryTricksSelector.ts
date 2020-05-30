@@ -1,16 +1,14 @@
-import { RootState } from "../../rootReducer";
+import { RootState, State } from "../../rootReducer";
 import { LibraryTrick } from "./Trick/TrickTypes";
 
 export type UserLibraryTrick = LibraryTrick & { addedToMyTricks: boolean };
 
-const userLibraryTricksSelector = ({ tricks, myTricks }: RootState): UserLibraryTrick[] => {
-	if (tricks === null) {
-		return [];
-	}
+const userLibraryTricksSelector = ({ tricks, myTricks }: RootState): State<UserLibraryTrick[]> => {
+	const libraryTricks = tricks.data;
 
 	const myTrickIds = myTricks?.map((x) => x.id);
 
-	const userLibraryTricks = tricks.map((libraryTrick) => {
+	const userLibraryTricks = libraryTricks.map((libraryTrick) => {
 		const addedToMyTricks = myTrickIds?.includes(libraryTrick.id) ?? false;
 
 		return {
@@ -19,7 +17,11 @@ const userLibraryTricksSelector = ({ tricks, myTricks }: RootState): UserLibrary
 		};
 	});
 
-	return userLibraryTricks;
+	return {
+		loading: tricks.loading,
+		data: userLibraryTricks,
+		error: undefined,
+	};
 };
 
 export default userLibraryTricksSelector;
