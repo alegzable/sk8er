@@ -9,7 +9,7 @@ import { usePreLoader } from "../../UI/PreLoader/PreLoader";
 
 const Tricks: React.FC = () => {
 	const dispatch = useDispatch();
-	const { data: tricks, loading } = useSelector(tricksSelector);
+	const { data: tricks, loading = true } = useSelector(tricksSelector);
 	usePreLoader(loading);
 
 	useEffect(() => {

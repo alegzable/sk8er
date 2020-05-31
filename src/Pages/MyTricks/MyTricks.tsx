@@ -13,7 +13,7 @@ type MyTrickProps = { id?: string };
 
 const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 	const dispatch = useDispatch();
-	const { data: myTricks, loading } = useSelector(myTricksSelector);
+	const { data: myTricks, loading = true } = useSelector(myTricksSelector);
 	const [selectedUserTrick, setSelectedTrick] = useState<MyTrick | undefined>();
 	const history = useHistory();
 	usePreLoader(loading);
