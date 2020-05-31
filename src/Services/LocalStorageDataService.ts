@@ -41,14 +41,14 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.userTrickPracticeDays, practiceDays);
 	};
 
-	public getMyTricksAsync = async (): Promise<UserTrick[]> => {
+	public getUserTricksAsync = async (): Promise<UserTrick[]> => {
 		await delay();
 
 		return this._getFromStorage<UserTrick[]>(localStorageKeys.userTricks) || [];
 	};
 
-	public getMyTrickAsync = async (libraryTrickId: string): Promise<UserTrick> => {
-		const userTricks = await this.getMyTricksAsync();
+	public getUserTrickAsync = async (libraryTrickId: string): Promise<UserTrick> => {
+		const userTricks = await this.getUserTricksAsync();
 		const userTrick = userTricks.find((x) => x.libraryTrickId === libraryTrickId);
 
 		if (userTrick === undefined) {
@@ -135,7 +135,7 @@ export class LocalStorageDataService {
 		return this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks) || [];
 	};
 
-	public addToMyTricksAsync = async (libraryTrickId: string) => {
+	public addToUserTricksAsync = async (libraryTrickId: string) => {
 		await delay();
 
 		const userTricks = this._getFromStorage<UserTrick[]>(localStorageKeys.userTricks) ?? [];
@@ -160,7 +160,7 @@ export class LocalStorageDataService {
 		this._addToStorage(localStorageKeys.userTricks, userTricks);
 	};
 
-	public removeFromMyTricksAsync = async (libraryTrickId: string) => {
+	public removeFromUserTricksAsync = async (libraryTrickId: string) => {
 		await delay();
 
 		const userTricks = this._getFromStorage<UserTrick[]>(localStorageKeys.userTricks) ?? [];
@@ -182,11 +182,11 @@ export class LocalStorageDataService {
 		}
 	};
 
-	private _getFromStorage<T>(key: string): T | null {
+	private _getFromStorage<T>(key: string): T | undefined {
 		const json = localStorage.getItem(key);
 
 		if (json === null) {
-			return null;
+			return undefined;
 		}
 
 		return JSON.parse(json);
