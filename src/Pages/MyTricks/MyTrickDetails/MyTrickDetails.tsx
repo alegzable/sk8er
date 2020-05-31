@@ -10,7 +10,7 @@ import ScoreChart from "./Score/ScoreChart/ScoreChart";
 import { useDispatch, useSelector } from "react-redux";
 import { MyTrick } from "../myTricksSelector";
 import {
-	getUserPracticeDaysAsync,
+	loadUserPracticeDaysAsync,
 	removeUserPracticeDayAsync,
 	addUserPracticeDayAsync,
 	updateUserPracticeDayAsync,
@@ -29,7 +29,7 @@ const MyTrickDetails: React.FC<MyTrickDetailsProps> = ({ myTrick }) => {
 	const redirectToTrickDetails = () => history.push(`/my-tricks/${userTrickId}`);
 
 	useEffect(() => {
-		dispatch(getUserPracticeDaysAsync(userTrickId));
+		dispatch(loadUserPracticeDaysAsync(userTrickId));
 	}, [dispatch, userTrickId]);
 
 	const onCellClick = async (date: CalendarDate, marked: boolean) => {

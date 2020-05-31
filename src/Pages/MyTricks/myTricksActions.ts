@@ -1,14 +1,14 @@
 import localStorageDataService from "../../Services/LocalStorageDataService";
 import { Dispatch } from "react";
-import actionTypes, { MyTricksInitiateAction, MyTricksAddAction, MyTricksRemoveAction } from "./myTricksActionTypes";
+import actionTypes, { MyTricksLoadAction, MyTricksAddAction, MyTricksRemoveAction } from "./myTricksActionTypes";
 
-export const getMyTricksAsync = () => async (dispatch: Dispatch<MyTricksInitiateAction>) => {
-	dispatch({ type: actionTypes.MY_TRICKS_INITIATE_REQUEST });
+export const loadMyTricksAsync = () => async (dispatch: Dispatch<MyTricksLoadAction>) => {
+	dispatch({ type: actionTypes.MY_TRICKS_LOAD_REQUEST });
 
 	const myTricks = await localStorageDataService.getMyTricksAsync();
 
 	dispatch({
-		type: actionTypes.MY_TRICKS_INITIATE_SUCCESS,
+		type: actionTypes.MY_TRICKS_LOAD_SUCCESS,
 		payload: myTricks,
 	});
 };

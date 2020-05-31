@@ -12,7 +12,7 @@ export const practiceDaysReducer = (
 	action: PracticeDaysAction
 ): State<UserTrickPracticeDay[]> => {
 	switch (action.type) {
-		case actionTypes.PRACTICE_DAYS_INITIATE_REQUEST:
+		case actionTypes.PRACTICE_DAYS_LOAD_REQUEST:
 		case actionTypes.PRACTICE_DAYS_ADD_REQUEST:
 		case actionTypes.PRACTICE_DAYS_UPDATE_REQUEST:
 		case actionTypes.PRACTICE_DAYS_REMOVE_REQUEST:
@@ -20,7 +20,7 @@ export const practiceDaysReducer = (
 				...state,
 				loading: true,
 			};
-		case actionTypes.PRACTICE_DAYS_INITIATE_SUCCESS:
+		case actionTypes.PRACTICE_DAYS_LOAD_SUCCESS:
 			return {
 				loading: false,
 				data: action.payload,
@@ -40,7 +40,7 @@ export const practiceDaysReducer = (
 				loading: false,
 				data: state.data.filter((x) => x.id !== action.payload),
 			};
-		case actionTypes.PRACTICE_DAYS_INITIATE_ERROR:
+		case actionTypes.PRACTICE_DAYS_LOAD_ERROR:
 		case actionTypes.PRACTICE_DAYS_ADD_ERROR:
 		case actionTypes.PRACTICE_DAYS_UPDATE_ERROR:
 		case actionTypes.PRACTICE_DAYS_REMOVE_ERROR:
