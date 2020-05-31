@@ -1,12 +1,16 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import classes from "./Backdrop.module.scss";
 
 type BackdropProps = {
 	show: boolean;
-	onClick: () => void;
+	onClick?: () => void;
 };
 
-const Backdrop: React.FC<BackdropProps> = (props: BackdropProps) =>
-	props.show ? <div className={classes.Backdrop} onClick={props.onClick}></div> : null;
+const Backdrop: React.FC<PropsWithChildren<BackdropProps>> = ({ show, onClick, children }) =>
+	show ? (
+		<div className={classes.Backdrop} onClick={onClick}>
+			{children}
+		</div>
+	) : null;
 
 export default Backdrop;
