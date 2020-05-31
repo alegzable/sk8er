@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadTricksAsync } from "./tricksActions";
 import { addMyTrickAsync, removeTrickAsync, loadMyTricksAsync } from "../MyTricks/myTricksActions";
 import tricksSelector from "./userLibraryTricksSelector";
+import { usePreLoader } from "../../UI/PreLoader/PreLoader";
 
 const Tricks: React.FC = () => {
 	const dispatch = useDispatch();
-	const { data: tricks } = useSelector(tricksSelector);
+	const { data: tricks, loading } = useSelector(tricksSelector);
+	usePreLoader(loading);
 
 	useEffect(() => {
 		dispatch(loadTricksAsync());

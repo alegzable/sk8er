@@ -22,7 +22,7 @@ const userLibraryTricksSelector: Selector<RootState, State<UserLibraryTrick[]>> 
 	});
 
 	return {
-		loading: tricksState.loading,
+		loading: tricksState.loading || userTricksState.loading,
 		data: userLibraryTricks,
 		error: undefined,
 	};

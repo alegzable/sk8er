@@ -7,14 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadMyTricksAsync } from "./myTricksActions";
 import myTricksSelector, { MyTrick } from "./myTricksSelector";
 import { loadTricksAsync } from "../Tricks/tricksActions";
+import { usePreLoader } from "../../UI/PreLoader/PreLoader";
 
 type MyTrickProps = { id?: string };
 
 const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 	const dispatch = useDispatch();
-	const { data: myTricks } = useSelector(myTricksSelector);
+	const { data: myTricks, loading } = useSelector(myTricksSelector);
 	const [selectedUserTrick, setSelectedTrick] = useState<MyTrick | undefined>();
 	const history = useHistory();
+	usePreLoader(loading);
 
 	useEffect(() => {
 		dispatch(loadTricksAsync());
@@ -58,12 +60,12 @@ const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 					<MyTrickDetails myTrick={selectedUserTrick}></MyTrickDetails>
 				</div>
 			</>
-		) : (
+		) : !loading ? (
 			<h2 className={classes.AddTricks}>
 				<span>Whoops! It's empty here :(</span>
 				<Link to="/">Let's start learning!</Link>
 			</h2>
-		);
+		) : null;
 
 	return <div className={classes.MyTricks}>{content}</div>;
 };
