@@ -1,10 +1,5 @@
 import { LibraryTrick } from "./Trick/TrickTypes";
-import {
-	TricksAction,
-	TRICKS_INITIATE_SUCCESS,
-	TRICKS_INITIATE_REQUEST,
-	TRICKS_INITIATE_ERROR,
-} from "./tricksActionTypes";
+import actionTypes, { TricksAction } from "./tricksActionTypes";
 import { State } from "../../rootReducer";
 
 const initialState: State<LibraryTrick[]> = {
@@ -17,17 +12,17 @@ export const tricksReducer = (
 	action: TricksAction
 ): State<LibraryTrick[]> => {
 	switch (action.type) {
-		case TRICKS_INITIATE_REQUEST:
+		case actionTypes.TRICKS_INITIATE_REQUEST:
 			return {
 				...state,
 				loading: true,
 			};
-		case TRICKS_INITIATE_SUCCESS:
+		case actionTypes.TRICKS_INITIATE_SUCCESS:
 			return {
 				loading: false,
 				data: action.payload,
 			};
-		case TRICKS_INITIATE_ERROR:
+		case actionTypes.TRICKS_INITIATE_ERROR:
 			return {
 				loading: false,
 				data: [],
