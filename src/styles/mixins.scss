@@ -21,3 +21,16 @@
 		color: transparentize($navyColorDark, 0.4);
 	}
 }
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@mixin rotate {
+	animation: rotation 1s infinite linear;
+}
