@@ -19,11 +19,9 @@ const PreLoader: React.FC = ({ children }) => {
 
 	return (
 		<PreLoaderContext.Provider value={setShow}>
-			{show && (
-				<Backdrop show={show}>
-					<FontAwesomeIcon icon={faSpinner} className={classes.Spinner} />
-				</Backdrop>
-			)}
+			<Backdrop show={show}>
+				<FontAwesomeIcon icon={faSpinner} className={classes.Spinner} />
+			</Backdrop>
 			{children}
 		</PreLoaderContext.Provider>
 	);
