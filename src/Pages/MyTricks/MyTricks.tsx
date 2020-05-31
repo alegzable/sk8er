@@ -3,25 +3,22 @@ import classes from "./MyTricks.module.scss";
 import MyTricksList from "./MyTricksList/MyTricksList";
 import MyTrickDetails from "./MyTrickDetails/MyTrickDetails";
 import { Link, useHistory, RouteComponentProps } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { loadMyTricksAsync } from "./myTricksActions";
 import myTricksSelector, { MyTrick } from "./myTricksSelector";
 import { loadTricksAsync } from "../Tricks/tricksActions";
 import { usePreLoader } from "../../UI/PreLoader/PreLoader";
+import useInitDispatcher from "../../Hooks/useInitDispatcher";
 
 type MyTrickProps = { id?: string };
 
 const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
-	const dispatch = useDispatch();
+	useInitDispatcher(loadTricksAsync, loadMyTricksAsync);
+
 	const { data: myTricks, loading = true } = useSelector(myTricksSelector);
 	const [selectedUserTrick, setSelectedTrick] = useState<MyTrick | undefined>();
 	const history = useHistory();
 	usePreLoader(loading);
-
-	useEffect(() => {
-		dispatch(loadTricksAsync());
-		dispatch(loadMyTricksAsync());
-	}, [dispatch]);
 
 	useEffect(() => {
 		if (myTricks.length === 0) {
