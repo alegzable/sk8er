@@ -7,7 +7,7 @@ import tricks from "./MockData/tricks.json";
 import localStorageDataService from "./Services/LocalStorageDataService";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
 
-localStorageDataService.initiateTricksLibrary(tricks);
+localStorageDataService.initiateTricksLibraryAsync(tricks);
 
 function App() {
 	return (
