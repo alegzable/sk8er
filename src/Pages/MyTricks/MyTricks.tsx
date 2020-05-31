@@ -4,9 +4,9 @@ import MyTricksList from "./MyTricksList/MyTricksList";
 import MyTrickDetails from "./MyTrickDetails/MyTrickDetails";
 import { Link, useHistory, RouteComponentProps } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyTricksAsync } from "./myTricksActions";
+import { loadMyTricksAsync } from "./myTricksActions";
 import myTricksSelector, { MyTrick } from "./myTricksSelector";
-import { getTricksAsync } from "../Tricks/tricksActions";
+import { loadTricksAsync } from "../Tricks/tricksActions";
 
 type MyTrickProps = { id?: string };
 
@@ -17,8 +17,8 @@ const MyTricks: React.FC<RouteComponentProps<MyTrickProps>> = ({ match }) => {
 	const history = useHistory();
 
 	useEffect(() => {
-		dispatch(getTricksAsync());
-		dispatch(getMyTricksAsync());
+		dispatch(loadTricksAsync());
+		dispatch(loadMyTricksAsync());
 	}, [dispatch]);
 
 	useEffect(() => {

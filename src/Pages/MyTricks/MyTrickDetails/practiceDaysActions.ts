@@ -3,19 +3,19 @@ import { Dispatch } from "react";
 import actionTypes, {
 	PracticeDaysAddAction,
 	PracticeDaysRemoveAction,
-	PracticeDaysInitiateAction,
+	PracticeDaysLoadAction,
 	PracticeDaysUpdateAction,
 } from "./practiceDaysActionTypes";
 import CalendarDate from "./Calendar/CalendarDate";
 
-export const getUserPracticeDaysAsync = (userTrickId: string) => async (
-	dispatch: Dispatch<PracticeDaysInitiateAction>
+export const loadUserPracticeDaysAsync = (userTrickId: string) => async (
+	dispatch: Dispatch<PracticeDaysLoadAction>
 ) => {
-	dispatch({ type: actionTypes.PRACTICE_DAYS_INITIATE_REQUEST });
+	dispatch({ type: actionTypes.PRACTICE_DAYS_LOAD_REQUEST });
 
 	const practiceDays = await localStorageDataService.getPracticeDaysAsync(userTrickId);
 
-	dispatch({ type: actionTypes.PRACTICE_DAYS_INITIATE_SUCCESS, payload: practiceDays });
+	dispatch({ type: actionTypes.PRACTICE_DAYS_LOAD_SUCCESS, payload: practiceDays });
 };
 
 export const addUserPracticeDayAsync = (userTrickId: string, date: CalendarDate) => async (

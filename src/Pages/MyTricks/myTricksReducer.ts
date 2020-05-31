@@ -9,7 +9,7 @@ const initialState: State<UserTrick[]> = {
 
 export const myTricksReducer = (state = initialState, action: MyTricksAction): State<UserTrick[]> => {
 	switch (action.type) {
-		case actionTypes.MY_TRICKS_INITIATE_REQUEST:
+		case actionTypes.MY_TRICKS_LOAD_REQUEST:
 		case actionTypes.MY_TRICKS_ADD_REQUEST:
 		case actionTypes.MY_TRICKS_REMOVE_REQUEST:
 			return {
@@ -17,7 +17,7 @@ export const myTricksReducer = (state = initialState, action: MyTricksAction): S
 				loading: true,
 			};
 
-		case actionTypes.MY_TRICKS_INITIATE_SUCCESS:
+		case actionTypes.MY_TRICKS_LOAD_SUCCESS:
 			return {
 				loading: false,
 				data: action.payload,
@@ -26,7 +26,7 @@ export const myTricksReducer = (state = initialState, action: MyTricksAction): S
 			return { loading: false, data: [...state.data, action.payload] };
 		case actionTypes.MY_TRICKS_REMOVE_SUCCESS:
 			return { loading: false, data: state.data.filter((x) => x.libraryTrickId !== action.payload) };
-		case actionTypes.MY_TRICKS_INITIATE_ERROR:
+		case actionTypes.MY_TRICKS_LOAD_ERROR:
 		case actionTypes.MY_TRICKS_ADD_ERROR:
 		case actionTypes.MY_TRICKS_REMOVE_ERROR:
 			return {

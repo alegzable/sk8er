@@ -12,17 +12,17 @@ export const tricksReducer = (
 	action: TricksAction
 ): State<LibraryTrick[]> => {
 	switch (action.type) {
-		case actionTypes.TRICKS_INITIATE_REQUEST:
+		case actionTypes.TRICKS_LOAD_REQUEST:
 			return {
 				...state,
 				loading: true,
 			};
-		case actionTypes.TRICKS_INITIATE_SUCCESS:
+		case actionTypes.TRICKS_LOAD_SUCCESS:
 			return {
 				loading: false,
 				data: action.payload,
 			};
-		case actionTypes.TRICKS_INITIATE_ERROR:
+		case actionTypes.TRICKS_LOAD_ERROR:
 			return {
 				loading: false,
 				data: [],

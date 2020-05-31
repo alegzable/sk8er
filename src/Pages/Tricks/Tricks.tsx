@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import classes from "./Tricks.module.scss";
 import Trick from "./Trick/Trick";
 import { useDispatch, useSelector } from "react-redux";
-import { getTricksAsync } from "./tricksActions";
-import { addMyTrickAsync, removeTrickAsync, getMyTricksAsync } from "../MyTricks/myTricksActions";
+import { loadTricksAsync } from "./tricksActions";
+import { addMyTrickAsync, removeTrickAsync, loadMyTricksAsync } from "../MyTricks/myTricksActions";
 import tricksSelector from "./userLibraryTricksSelector";
 
 const Tricks: React.FC = () => {
@@ -11,8 +11,8 @@ const Tricks: React.FC = () => {
 	const { data: tricks } = useSelector(tricksSelector);
 
 	useEffect(() => {
-		dispatch(getTricksAsync());
-		dispatch(getMyTricksAsync());
+		dispatch(loadTricksAsync());
+		dispatch(loadMyTricksAsync());
 	}, [dispatch]);
 
 	const addToMyTricks = async (id: string) => {
