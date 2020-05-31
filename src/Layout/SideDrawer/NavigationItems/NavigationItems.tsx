@@ -1,32 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import classes from "./NavigationItems.module.scss";
-import { MyTrick } from "../../../Pages/Tricks/Trick/TrickTypes";
-import localStorageDataService from "../../../Services/LocalStorageDataService";
 import { NavLink, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import myTricksSelector from "../../../Pages/MyTricks/myTricksSelector";
 
-type NavigationItemsProps = {
-	open: boolean;
-};
-
-const NavigationItems: React.FC<NavigationItemsProps> = ({ open }) => {
+const NavigationItems: React.FC = () => {
 	const history = useHistory();
+	const { data: myTricks } = useSelector(myTricksSelector);
 
-	const [myTricks, setMyTricks] = useState<MyTrick[]>([]);
 	const [myTricksExpanded, setMyTricksExpanded] = useState(true);
-
-	useEffect(() => {
-		const getMyTricks = async () => {
-			const myTricks = await localStorageDataService.getMyTricksAsync();
-
-			setMyTricks(myTricks);
-		};
-
-		if (open) {
-			getMyTricks();
-		}
-	}, [open]);
 
 	const subNavigationItemsClasses = [classes.NavigationItems];
 
@@ -38,7 +22,7 @@ const NavigationItems: React.FC<NavigationItemsProps> = ({ open }) => {
 		<ul className={subNavigationItemsClasses.join(" ")}>
 			{myTricks.map((x) => (
 				<li className={classes.NavigationSubItem}>
-					<NavLink key={x.id} to={`/my-tricks/${x.id}`} activeClassName={classes.Active}>
+					<NavLink key={x.userTrickId} to={`/my-tricks/${x.userTrickId}`} activeClassName={classes.Active}>
 						{x.name}
 					</NavLink>
 				</li>

@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import classes from "./Tricks.module.scss";
 import Trick from "./Trick/Trick";
-import localStorageDataService from "../../Services/LocalStorageDataService";
-import { UserLibraryTrick } from "./Trick/TrickTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { getTricksAsync } from "./tricksActions";
+import { addMyTrickAsync, removeTrickAsync, getMyTricksAsync } from "../MyTricks/myTricksActions";
+import tricksSelector from "./userLibraryTricksSelector";
 
 const Tricks: React.FC = () => {
-	const [tricks, setTricks] = useState<UserLibraryTrick[]>([]);
+	const dispatch = useDispatch();
+	const { data: tricks } = useSelector(tricksSelector);
 
 	useEffect(() => {
-		const getUserLibraryTricks = async () => {
-			const libraryTricks = await localStorageDataService.getUserLibraryTricksAsync();
+		dispatch(getTricksAsync());
+		dispatch(getMyTricksAsync());
+	}, [dispatch]);
 
-			setTricks(libraryTricks);
-		};
-
-		getUserLibraryTricks();
-	}, []);
-
-	const addToMyTricks = async (id: number) => {
-		await localStorageDataService.addToMyTricksAsync(id);
-
-		setTricks(await localStorageDataService.getUserLibraryTricksAsync());
+	const addToMyTricks = async (id: string) => {
+		dispatch(addMyTrickAsync(id));
 	};
 
-	const removeFromMyTricks = async (id: number) => {
-		await localStorageDataService.removeFromMyTricksAsync(id);
-
-		setTricks(await localStorageDataService.getUserLibraryTricksAsync());
+	const removeFromMyTricks = async (id: string) => {
+		dispatch(removeTrickAsync(id));
 	};
 
 	const trickList = tricks.map((trick) => (
@@ -40,6 +34,7 @@ const Tricks: React.FC = () => {
 			removeFromMyTricks={removeFromMyTricks}
 		/>
 	));
+
 	return <div className={classes.Tricks}>{trickList}</div>;
 };
 

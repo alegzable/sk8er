@@ -24,7 +24,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ open, onClose }) => {
 					<Logo />
 				</div>
 				<nav>
-					<NavigationItems open={open} />
+					<NavigationItems />
 				</nav>
 			</div>
 		</React.Fragment>

@@ -11,22 +11,23 @@ import { nameof } from "../../../../../Utils/stringUtils";
 import ScoreFormFields from "./ScoreFormFields";
 import ErrorMessage from "../../../../../Forms/ErrorMessage/ErrorMessage";
 import SubmitButton from "../../../../../Forms/SubmitButton/SubmitButton";
-import { MyTrick } from "../../../../Tricks/Trick/TrickTypes";
+import { UserTrickPracticeDay } from "../../../../Tricks/Trick/TrickTypes";
 
 type ScoreDialogProps = {
 	isOpen: boolean;
-	trick: MyTrick;
+	trickName: string;
+	practiceDays: UserTrickPracticeDay[];
 	onClose: () => void;
 	onSave: (date: CalendarDate, score: number) => void;
 };
 
-const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trick, onClose, onSave }) => {
+const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trickName, practiceDays, onClose, onSave }) => {
 	const saveScore = (score: ScoreFormFields) => {
 		onSave(score.scoreDate as CalendarDate, score.scoreValue as number);
 	};
 
 	const getScore = (date: CalendarDate): number | undefined => {
-		return trick.practiceDates?.find((x) => x.date.equals(date))?.score;
+		return practiceDays?.find((x) => x.date.equals(date))?.score;
 	};
 
 	const getInitialValues = (): ScoreFormFields => {
@@ -59,7 +60,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({ isOpen, trick, onClose, onSav
 					<div>
 						<div className={classes.Description}>
 							<p>Been practicing for a while? Rate yourself!</p>
-							<p>Try performing {trick.name} 10 times in a row and see how many were successful!</p>
+							<p>Try performing {trickName} 10 times in a row and see how many were successful!</p>
 							<p>Your scores will be displayed in a graph to show your progress over time.</p>
 						</div>
 						<div className={classes.Inputs}>

@@ -1,6 +1,11 @@
-import { UserLibraryTrick, LibraryTrick, MyTrick, MyTrickJSON } from "../Pages/Tricks/Trick/TrickTypes";
+import {
+	LibraryTrick,
+	UserTrick,
+	UserTrickPracticeDay,
+	UserTrickPracticeDayJSON,
+} from "../Pages/Tricks/Trick/TrickTypes";
 import CalendarDate from "../Pages/MyTricks/MyTrickDetails/Calendar/CalendarDate";
-import PracticeDate from "../Pages/MyTricks/MyTrickDetails/Score/DailyScore";
+import { v4 } from "uuid";
 
 const delay = () => {
 	return new Promise((resolve) => setTimeout(resolve, 200));
@@ -8,168 +13,165 @@ const delay = () => {
 
 export const localStorageKeys = {
 	tricks: "TRICKS",
-	myTricks: "MY_TRICKS",
+	userTricks: "USER_TRICKS",
+	userTrickPracticeDays: "USER_TRICK_PRACTICE_DAYS",
 } as const;
 
 export class LocalStorageDataService {
-	public updateTrickScoreAsync = async (id: number, score: PracticeDate) => {
-		if (score.date === undefined || score.score === undefined) {
-			throw new Error("Invalid date or value");
-		}
+	public updateTrickScoreAsync = async (userTrickId: string, date: CalendarDate, score?: number) => {
+		const practiceDays =
+			this._getFromStorage<UserTrickPracticeDayJSON[]>(localStorageKeys.userTrickPracticeDays) || [];
 
-		const myTricks = await this.getMyTricksAsync();
-		const myTrick = myTricks.find((x) => x.id === id);
+		const practiceDay = practiceDays.find(
+			(x) => x.userTrickId === userTrickId && new CalendarDate(x.date.year, x.date.month, x.date.day).equals(date)
+		);
 
-		if (myTrick === undefined) {
-			throw new Error("Trick not found");
-		}
-
-		const practiceDates = myTrick.practiceDates;
-		const practiceDate = practiceDates.find((x) => x.date.equals(score.date));
-
-		if (!practiceDate) {
-			practiceDates.push(score);
+		if (!practiceDay) {
+			const practiceDayToAdd = {
+				id: v4(),
+				userTrickId,
+				date,
+				score,
+			};
+			practiceDays.push(practiceDayToAdd);
 		} else {
-			practiceDate.score = score.score;
+			practiceDay.score = score;
 		}
 
-		this._addToStorage(localStorageKeys.myTricks, myTricks);
+		this._addToStorage(localStorageKeys.userTrickPracticeDays, practiceDays);
 	};
 
-	public getMyTricksAsync = async (): Promise<MyTrick[]> => {
+	public getMyTricksAsync = async (): Promise<UserTrick[]> => {
 		await delay();
 
-		const myTricksJSON = this._getFromStorage<MyTrickJSON[]>(localStorageKeys.myTricks) || [];
-
-		return myTricksJSON.map((x) => {
-			return {
-				id: x.id,
-				name: x.name,
-				videoUrl: x.videoUrl,
-				practiceDates: x.practiceDates
-					.map((practiceDay) => {
-						return new PracticeDate(
-							new CalendarDate(practiceDay.date.year, practiceDay.date.month, practiceDay.date.day),
-							practiceDay.score
-						);
-					})
-					.sort((date1: PracticeDate, date2: PracticeDate) => date1.date.compare(date2.date)),
-			};
-		});
+		return this._getFromStorage<UserTrick[]>(localStorageKeys.userTricks) || [];
 	};
 
-	public getMyTrickAsync = async (id?: number): Promise<MyTrick> => {
-		if (!id) {
+	public getMyTrickAsync = async (libraryTrickId: string): Promise<UserTrick> => {
+		const userTricks = await this.getMyTricksAsync();
+		const userTrick = userTricks.find((x) => x.libraryTrickId === libraryTrickId);
+
+		if (userTrick === undefined) {
 			throw new Error("Trick not found");
 		}
 
-		const myTricks = await this.getMyTricksAsync();
-		const myTrick = myTricks.find((x) => x.id === id);
-
-		if (myTrick === undefined) {
-			throw new Error("Trick not found");
-		}
-
-		return myTrick;
+		return userTrick;
 	};
 
-	public addPracticeDayAsync = async (id: number, date: CalendarDate) => {
-		const myTricks = await this.getMyTricksAsync();
-		const trick = myTricks.find((x) => x.id === id);
+	public getPracticeDaysAsync = async (userTrickId: string): Promise<UserTrickPracticeDay[]> => {
+		await delay();
 
-		if (!trick) {
-			return;
+		const jsonResult = (
+			this._getFromStorage<UserTrickPracticeDayJSON[]>(localStorageKeys.userTrickPracticeDays) ?? []
+		).filter((x) => x.userTrickId === userTrickId);
+
+		return jsonResult.map((x) => ({
+			...x,
+			date: new CalendarDate(x.date.year, x.date.month, x.date.day),
+		}));
+	};
+
+	public getPracticeDayAsync = async (userTrickId: string, date: CalendarDate): Promise<UserTrickPracticeDay> => {
+		await delay();
+
+		const userTrickPracticeDays =
+			this._getFromStorage<UserTrickPracticeDayJSON[]>(localStorageKeys.userTrickPracticeDays) ?? [];
+
+		const jsonResult = userTrickPracticeDays.find(
+			(x) => x.userTrickId === userTrickId && new CalendarDate(x.date.year, x.date.month, x.date.day).equals(date)
+		);
+
+		if (jsonResult === undefined) {
+			throw new Error("Practice day not found");
 		}
 
-		const alreadyAdded = trick.practiceDates.findIndex((x) => x.date.equals(date)) !== -1;
+		return {
+			...jsonResult,
+			date,
+		};
+	};
+
+	public addPracticeDayAsync = async (userTrickId: string, date: CalendarDate) => {
+		await delay();
+
+		const userTrickPracticeDays =
+			this._getFromStorage<UserTrickPracticeDayJSON[]>(localStorageKeys.userTrickPracticeDays) ?? [];
+
+		const alreadyAdded = userTrickPracticeDays.some(
+			(x) => x.userTrickId === userTrickId && new CalendarDate(x.date.year, x.date.month, x.date.day).equals(date)
+		);
 
 		if (alreadyAdded) {
 			return;
 		}
 
-		trick.practiceDates.push(new PracticeDate(date));
+		const practiceDayToAdd = {
+			id: v4(),
+			userTrickId,
+			date,
+		};
 
-		this._addToStorage(localStorageKeys.myTricks, myTricks);
+		userTrickPracticeDays.push(practiceDayToAdd);
+
+		this._addToStorage(localStorageKeys.userTrickPracticeDays, userTrickPracticeDays);
 	};
 
-	public removePracticeDayAsync = async (id: number, date: CalendarDate) => {
-		const myTricks = await this.getMyTricksAsync();
-		const trick = myTricks.find((x) => x.id === id);
-
-		if (!trick) {
-			return;
-		}
-
-		const dayToRemoveIndex = trick.practiceDates.findIndex((x) => x.date.equals(date));
+	public removePracticeDayAsync = async (id: string) => {
+		const userTrickPracticeDays =
+			this._getFromStorage<UserTrickPracticeDayJSON[]>(localStorageKeys.userTrickPracticeDays) ?? [];
+		const dayToRemoveIndex = userTrickPracticeDays.findIndex((x) => x.id === id);
 
 		if (dayToRemoveIndex === -1) {
 			return;
 		}
 
-		trick.practiceDates.splice(dayToRemoveIndex, 1);
-
-		this._addToStorage(localStorageKeys.myTricks, myTricks);
+		userTrickPracticeDays.splice(dayToRemoveIndex, 1);
+		this._addToStorage(localStorageKeys.userTrickPracticeDays, userTrickPracticeDays);
 	};
 
-	public getUserLibraryTricksAsync = async (): Promise<UserLibraryTrick[]> => {
+	public getLibraryTricksAsync = async (): Promise<LibraryTrick[]> => {
 		await delay();
 
-		const libraryTricks = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks);
-		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks);
-
-		if (libraryTricks === null) {
-			return [];
-		}
-
-		const myTrickIds = myTricks?.map((x) => x.id);
-
-		const userLibraryTricks = libraryTricks.map((libraryTrick) => {
-			const addedToMyTricks = myTrickIds?.includes(libraryTrick.id) ?? false;
-
-			return {
-				...libraryTrick,
-				addedToMyTricks,
-			};
-		});
-
-		return userLibraryTricks;
+		return this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks) || [];
 	};
 
-	public addToMyTricksAsync = async (id: number) => {
+	public addToMyTricksAsync = async (libraryTrickId: string) => {
 		await delay();
 
-		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
-		const alreadyAdded = myTricks.findIndex((x) => x.id === id) !== -1;
+		const userTricks = this._getFromStorage<UserTrick[]>(localStorageKeys.userTricks) ?? [];
+		const alreadyAdded = userTricks.findIndex((x) => x.libraryTrickId === libraryTrickId) !== -1;
 
 		if (alreadyAdded) {
 			return;
 		}
 
-		const trickToAdd = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks)?.find((x) => x.id === id);
+		const trickToAdd = this._getFromStorage<LibraryTrick[]>(localStorageKeys.tricks)?.find(
+			(x) => x.id === libraryTrickId
+		);
 
 		if (trickToAdd === undefined) {
 			throw new Error("Trick does not exist");
 		}
 
-		(trickToAdd as MyTrick).practiceDates = [];
+		const userTrick = { id: v4(), libraryTrickId };
 
-		myTricks.push(trickToAdd as MyTrick);
+		userTricks.push(userTrick);
 
-		this._addToStorage(localStorageKeys.myTricks, myTricks);
+		this._addToStorage(localStorageKeys.userTricks, userTricks);
 	};
 
-	public removeFromMyTricksAsync = async (id: number) => {
+	public removeFromMyTricksAsync = async (libraryTrickId: string) => {
 		await delay();
 
-		const myTricks = this._getFromStorage<MyTrick[]>(localStorageKeys.myTricks) ?? [];
-		const trickToRemoveIndex = myTricks.findIndex((x) => x.id === id);
+		const userTricks = this._getFromStorage<UserTrick[]>(localStorageKeys.userTricks) ?? [];
+		const trickToRemoveIndex = userTricks.findIndex((x) => x.libraryTrickId === libraryTrickId);
 
 		if (trickToRemoveIndex === -1) {
 			return;
 		}
 
-		myTricks.splice(trickToRemoveIndex, 1);
-		this._addToStorage(localStorageKeys.myTricks, myTricks);
+		userTricks.splice(trickToRemoveIndex, 1);
+		this._addToStorage(localStorageKeys.userTricks, userTricks);
 	};
 
 	public initiateTricksLibrary = (tricks: LibraryTrick[]) => {
