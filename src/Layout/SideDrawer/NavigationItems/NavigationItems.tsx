@@ -21,8 +21,8 @@ const NavigationItems: React.FC = () => {
 	const myTricksNavigation = (
 		<ul className={subNavigationItemsClasses.join(" ")}>
 			{myTricks.map((x) => (
-				<li className={classes.NavigationSubItem}>
-					<NavLink key={x.userTrickId} to={`/my-tricks/${x.userTrickId}`} activeClassName={classes.Active}>
+				<li className={classes.NavigationSubItem} key={x.userTrickId}>
+					<NavLink to={`/my-tricks/${x.userTrickId}`} activeClassName={classes.Active}>
 						{x.name}
 					</NavLink>
 				</li>
