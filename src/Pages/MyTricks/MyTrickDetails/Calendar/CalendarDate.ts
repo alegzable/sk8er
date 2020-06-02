@@ -1,5 +1,7 @@
 import { addDays } from "../../../../Utils/dateUtils";
+
 type CompareResult = 1 | 0 | -1;
+
 export default class CalendarDate {
 	constructor(public year: number, public month: number, public day: number) {}
 
