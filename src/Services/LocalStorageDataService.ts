@@ -161,10 +161,10 @@ export class LocalStorageDataService {
 	};
 
 	public initiateTricksLibraryAsync = async (tricks: LibraryTrick[]) => {
-		const shouldInitiate = (await this._getFromStorageAsync<LibraryTrick[]>(localStorageKeys.tricks)) === null;
+		const shouldInitiate = (await this._getFromStorageAsync<LibraryTrick[]>(localStorageKeys.tricks)) === undefined;
 
 		if (shouldInitiate) {
-			this._addToStorageAsync(localStorageKeys.tricks, tricks);
+			await this._addToStorageAsync(localStorageKeys.tricks, tricks);
 		}
 	};
 
