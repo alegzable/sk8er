@@ -26,9 +26,11 @@ const getColumnsWithDates = (
 		const column = [];
 
 		for (let i = 0; i < defaultCellsInColumn && totalCells > 0; i++) {
+			const date = firstDate;
+			
 			column.push({
-				date: firstDate,
-				marked: markedDates.findIndex((x) => x.equals(firstDate)) !== -1,
+				date: date,
+				marked: markedDates.findIndex((x) => x.equals(date)) !== -1,
 			});
 			firstDate = firstDate.addDays(1);
 			totalCells--;
