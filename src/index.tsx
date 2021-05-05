@@ -14,19 +14,25 @@ import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 import thunk from "redux-thunk";
 import rootReducer from "./rootReducer";
 import PreLoader from "./UI/PreLoader/PreLoader";
+import localStorageDataService from "./Services/LocalStorageDataService";
+import tricks from "./MockData/tricks.json";
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+localStorageDataService.initiateTricksLibraryAsync(tricks)
+	.then(() => {
+		const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
-ReactDOM.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<PreLoader>
-				<App />
-			</PreLoader>
-		</Provider>
-	</React.StrictMode>,
-	document.getElementById("root")
-);
+		ReactDOM.render(
+			<React.StrictMode>
+				<Provider store={store}>
+					<PreLoader>
+						<App />
+					</PreLoader>
+				</Provider>
+			</React.StrictMode>,
+			document.getElementById("root")
+		);
+	})
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

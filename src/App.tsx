@@ -3,11 +3,7 @@ import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import Tricks from "./Pages/Tricks/Tricks";
 import MyTricks from "./Pages/MyTricks/MyTricks";
-import tricks from "./MockData/tricks.json";
-import localStorageDataService from "./Services/LocalStorageDataService";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-
-localStorageDataService.initiateTricksLibraryAsync(tricks);
 
 function App() {
 	return (
