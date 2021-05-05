@@ -60,7 +60,7 @@ const Calendar: React.FC<CalendarProps> = ({ markedDates, onCellClick, title }) 
 	}, []);
 
 	useEffect(() => {
-		const columns = getColumnsWithDates(numberOfColumns * pageNumber, CalendarDate.today(), markedDates);
+		const columns = getColumnsWithDates(numberOfColumns, CalendarDate.today(), markedDates);
 		setColumnsWithDates(columns);
 	}, [numberOfColumns, markedDates]);
 
