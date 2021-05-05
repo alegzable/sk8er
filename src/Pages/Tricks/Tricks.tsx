@@ -2,14 +2,13 @@ import React from "react";
 import classes from "./Tricks.module.scss";
 import Trick from "./Trick/Trick";
 import { useSelector } from "react-redux";
-import { loadTricksAsync } from "./tricksActions";
-import { addMyTrickAsync, removeTrickAsync, loadMyTricksAsync } from "../MyTricks/myTricksActions";
+import { addMyTrickAsync, removeTrickAsync } from "../MyTricks/myTricksActions";
 import tricksSelector from "./userLibraryTricksSelector";
 import { usePreLoader } from "../../UI/PreLoader/PreLoader";
 import useInitDispatcher from "../../Hooks/useInitDispatcher";
 
 const Tricks: React.FC = () => {
-	const dispatch = useInitDispatcher(loadTricksAsync, loadMyTricksAsync);
+	const dispatch = useInitDispatcher();
 	const { data: tricks, loading = true } = useSelector(tricksSelector);
 	usePreLoader(loading);
 
